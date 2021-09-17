@@ -36,7 +36,9 @@ class GridworldEnv(gym.Env):
     metadata = {"render.modes": ["rgb_array"], "video.frames_per_second": 50}
     pixel_scale = 10
 
-    def __init__(self, dt=0.5):
+    def __init__(self, food_items: int = 10, dt: float = 0.5):
+        assert food_items < 64, "Food must be < 64"
+        self.food_items = food_items
         self.dt = dt
 
     def _draw_square(self, img, x, y, color):
@@ -48,16 +50,29 @@ class GridworldEnv(gym.Env):
         ] = color
         return img
 
+    def _distribute_food(self):
+        prob = np.random.random(
+            ([x.n * self.pixel_scale for x in self.observation_space])
+        )
+        highest_indices = np.unravel_index(np.argsort(prob, axis=None), prob.shape)
+        self.food = list(zip(highest_indices[0][:self.food_items], highest_indices[1][:self.food_items]))
+
+
     def render(self, mode="rgb_array"):
-        img = np.zeros(([x.n * self.pixel_scale for x in self.observation_space]))
-        self._draw_square(img, *self.state[:2], 1)
+        img = np.zeros((*[x.n * self.pixel_scale for x in self.observation_space], 3))
+        # Draw food
+        for (x, y) in self.food:
+            self._draw_square(img, x / self.pixel_scale, y / self.pixel_scale, [0, 1, 0])
+        # Draw agent
+        self._draw_square(img, *self.state[:2], [1, 0, 0])
         return img
 
     def reset(self):
         # Init in center pointing north
         self.state = np.array(
-            [int(x.n / 2) for x in self.observation_space] + [math.pi / 2]
+            [int(x.n / 2) for x in self.observation_space] + [0]
         )
+        self._distribute_food()
         return self.state
 
     def step(self, action):
@@ -77,7 +92,14 @@ class GridworldEnv(gym.Env):
             if move.sum() > 0.5:
                 self.state = np.array([*(self.state[:2] + move), angle])
 
-        return self.state, 0, False, {}
+        # Define observation
+        observation = np.array([0, 0])
+
+        # Define reward
+        # 0: if not on food
+        # 1: if on food source, delete food
+
+        return observation, 0, False, {}
 
 
 if __name__ == "__main__":
