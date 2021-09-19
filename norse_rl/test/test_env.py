@@ -1,7 +1,7 @@
 import math
 import numpy as np
 
-from rl.env import GridworldEnv
+from norse_rl.env import GridworldEnv
 
 def test_step_stay():
    w = GridworldEnv(dt = 0.5)

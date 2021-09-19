@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: norse-rl
+Version: 0.0.1
+Summary: Reinforcement learning environment for spiking neural network
+Home-page: https://github.com/ncskth/norse-rl
+Author: Jens E. Pedersen
+Author-email: jeped@kth.se.
+License: UNKNOWN
+Description: # Norse RL
+        
+        Reinforcement learning for [Norse](https://github.com/norse/norse)
+Platform: UNKNOWN
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
