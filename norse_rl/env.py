@@ -52,7 +52,7 @@ class GridworldEnv(gym.Env):
 
     def _distribute_food(self):
         prob = np.random.random(
-            ([x.n * self.pixel_scale for x in self.observation_space])
+            self.pixel_scale * self.observation_space.nvec
         )
         highest_indices = np.unravel_index(np.argsort(prob, axis=None), prob.shape)
         self.food = np.array(
