@@ -13,15 +13,13 @@ class GridworldEnv(gym.Env):
     Observation:
         Type: Box(2)
         Num     Observation               Min                     Max
-        0       Distance to food          0                       91
+        0       Distance to food          0                       ~14
         1       Relative angle to food    -3.14                   3.14
     Actions:
-        Type: MultiDiscrete([2, 2])
+        Type: Box(2,)
         Num     Action
-        [0, 0]  Stand still
-        [1, 0]  Rotate left
-        [0, 1]  Rotate right
-        [1, 1]  Move forward
+        0       Movement of the left feet
+        1       Movement of the right feet
     Reward:
         Reward is 0 for every step taken, 1 when standing on food source
     Starting State:
@@ -31,36 +29,35 @@ class GridworldEnv(gym.Env):
 
     """
 
-    action_space = spaces.MultiDiscrete([2, 2])  # Walk left or walk right
-    observation_space = spaces.MultiDiscrete([64, 64])
-    metadata = {"render.modes": ["rgb_array"], "video.frames_per_second": 50}
-    pixel_scale = 10
+    MAX_SIZE = 500
 
-    def __init__(self, food_items: int = 10, dt: float = 0.5):
-        assert food_items < 64, "Food must be < 64"
+    action_space = spaces.Box(0, 1, shape=(2,))
+    observation_space = spaces.MultiDiscrete([MAX_SIZE, MAX_SIZE])
+    metadata = {"render.modes": ["rgb_array"], "video.frames_per_second": 30}
+    metadata = {"render.modes": ["rgb_array"], "video.frames_per_second": 50}
+    pixel_scale = 5
+
+    def __init__(self, food_items: int = 10, dt: float = 2.0):
+        assert food_items < self.MAX_SIZE, f"Food must be < {self.MAX_SIZE}"
         self.food_items = food_items
         self.dt = dt
 
     def _draw_square(self, img, x, y, color):
-        x_scaled = int(x * self.pixel_scale)
-        y_scaled = int(y * self.pixel_scale)
+        x = int(x)
+        y = int(y)
         img[
-            y_scaled : y_scaled + self.pixel_scale,
-            x_scaled : x_scaled + self.pixel_scale,
+            y - self.pixel_scale : y + self.pixel_scale,
+            x - self.pixel_scale : x + self.pixel_scale,
         ] = color
         return img
 
     def _distribute_food(self):
-        prob = np.random.random(
-            self.pixel_scale * self.observation_space.nvec
-        )
+        prob = np.random.random(self.observation_space.nvec)
         highest_indices = np.unravel_index(np.argsort(prob, axis=None), prob.shape)
-        self.food = np.array(
-            list(
-                zip(
-                    highest_indices[0][: self.food_items],
-                    highest_indices[1][: self.food_items],
-                )
+        self.food = list(
+            zip(
+                highest_indices[0][: self.food_items],
+                highest_indices[1][: self.food_items],
             )
         )
 
@@ -72,12 +69,12 @@ class GridworldEnv(gym.Env):
             if d < min_dist:
                 min_dist = d
                 min_pos = f
-        return min_dist, min_pos
+        return min_dist * 0.1, min_pos  # Scale distance to 10%
 
     def _observe(self):
         # Define reward
         dist, food_pos = self._closest_food(self.state[:2])
-        if dist == 0:
+        if dist < 0.5:
             self.food.remove(food_pos)  # Delete food
             reward = 1
             dist, food_pos = self._closest_food(self.state[:2])
@@ -86,20 +83,18 @@ class GridworldEnv(gym.Env):
 
         # Define angle to food
         p1 = np.zeros(2)
-        p2 = self.state[:2] - food_pos
+        p2 = self.state[:2] - np.array(food_pos)
         angle = np.math.atan2(np.linalg.det([p1, p2]), np.dot(p1, p2))
         return np.array([dist, angle]), reward
 
     def render(self, mode="rgb_array"):
-        img = np.zeros((*[x * self.pixel_scale for x in self.observation_space.nvec], 3))
+        img = np.zeros((*[x for x in self.observation_space.nvec], 3))
         if len(self.food) == 0:
             return img
 
         # Draw food
         for (x, y) in self.food:
-            self._draw_square(
-                img, x / self.pixel_scale, y / self.pixel_scale, [0, 1, 0]
-            )
+            self._draw_square(img, x, y, [0, 1, 0])
         # Draw agent
         self._draw_square(img, *self.state[:2], [1, 0, 0])
         return img
@@ -111,21 +106,28 @@ class GridworldEnv(gym.Env):
         return self._observe()[0]
 
     def step(self, action):
-        err_msg = "%r (%s) invalid" % (action, type(action))
-        assert self.action_space.contains(action), err_msg
-
-        left_move, right_move = action
+        left_move, right_move = np.array(action).clip(-1, 1)
         angle = self.state[-1]
 
-        if left_move and not right_move:
-            self.state = np.array([*self.state[:2], angle + math.pi / 2 * self.dt])
-        elif right_move and not left_move:
-            self.state = np.array([*self.state[:2], angle - math.pi / 2 * self.dt])
-        elif left_move and right_move:
-            move = np.array([math.cos(angle), math.sin(angle)])
-            # Ignore moves if angle is not aligned with axes
-            if move.sum() > 0.5:
-                self.state = np.array([*(self.state[:2] + move), angle])
+        d_rotation = (right_move - left_move) * self.dt / math.pi * 2
+        d_x = min(left_move, right_move) * math.cos(d_rotation) * self.dt
+        d_x += math.cos(angle) * self.dt
+        d_y = -min(left_move, right_move) * math.sin(d_rotation) * self.dt
+        d_y += math.sin(angle) * self.dt
+
+        # if left_move and not right_move:
+        #     self.state = np.array([*self.state[:2], angle + math.pi / 2 * self.dt])
+        # elif right_move and not left_move:
+        #     self.state = np.array([*self.state[:2], angle - math.pi / 2 * self.dt])
+        # elif left_move and right_move:
+        #     move = np.array([math.cos(angle), math.sin(angle)])
+        #     # Ignore moves if angle is not aligned with axes
+        #     if move.sum() > 0.5:
+        #         self.state = np.array([*(self.state[:2] + move), angle])
+
+        # Set new state and validate
+        location = (self.state[:2] + np.array([d_x, d_y])).clip(0, self.MAX_SIZE)
+        self.state = np.array([*location, angle + d_rotation])
 
         # Define observation
         observation, reward = self._observe()
