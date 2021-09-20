@@ -91,7 +91,7 @@ class GridworldEnv(gym.Env):
         return np.array([dist, angle]), reward
 
     def render(self, mode="rgb_array"):
-        img = np.zeros((*[x.n * self.pixel_scale for x in self.observation_space], 3))
+        img = np.zeros((*[x * self.pixel_scale for x in self.observation_space.nvec], 3))
         if len(self.food) == 0:
             return img
 
