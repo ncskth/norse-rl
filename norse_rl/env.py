@@ -25,7 +25,7 @@ class GridworldEnv(gym.Env):
     Reward:
         Reward is 0 for every step taken, 1 when standing on food source
     Starting State:
-        Center, pointing north
+        Center, pointing east
     Episode Termination:
         None
 
@@ -105,8 +105,8 @@ class GridworldEnv(gym.Env):
         return img
 
     def reset(self):
-        # Init in center pointing north
-        self.state = np.array([int(x.n / 2) for x in self.observation_space] + [0])
+        # Init in center pointing east
+        self.state = np.array([x // 2 for x in self.observation_space.nvec] + [0])
         self._distribute_food()
         return self._observe()[0]
 
