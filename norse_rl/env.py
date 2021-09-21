@@ -31,6 +31,7 @@ class GridworldEnv(gym.Env):
 
     MAX_SIZE = 500
 
+    action_labels = ["Left", "Right"]
     observation_labels = ["Distance", "Angle"]
 
     action_space = spaces.Box(0, 1, shape=(2,))
@@ -71,7 +72,7 @@ class GridworldEnv(gym.Env):
             if d < min_dist:
                 min_dist = d
                 min_pos = f
-        return min_dist * 0.1, min_pos  # Scale distance to 10%
+        return min_dist / 142, min_pos  # Scale distance [0;1]
 
     def _observe(self):
         # Define reward
@@ -112,10 +113,8 @@ class GridworldEnv(gym.Env):
         angle = self.state[-1]
 
         d_rotation = (right_move - left_move) * self.dt / math.pi * 2
-        d_x = min(left_move, right_move) * math.cos(d_rotation) * self.dt
-        d_x += math.cos(angle) * self.dt
-        d_y = -min(left_move, right_move) * math.sin(d_rotation) * self.dt
-        d_y += math.sin(angle) * self.dt
+        d_x = min(left_move, right_move) * math.cos(angle + d_rotation) * self.dt
+        d_y = -min(left_move, right_move) * math.sin(angle + d_rotation) * self.dt
 
         # if left_move and not right_move:
         #     self.state = np.array([*self.state[:2], angle + math.pi / 2 * self.dt])
