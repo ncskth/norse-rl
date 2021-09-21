@@ -7,21 +7,35 @@ import IPython.display as display
 import norse_rl  # Init environment
 
 
-def draw_network(ax, layer_sizes, weights):
+def draw_network(ax, activities, weights, labels=[]):
     # Thanks to https://stackoverflow.com/a/67289898/999865
     top = 0.9
     bottom = 0.1
     left = 0.2
     right = 0.9
-    layer_sizes = [len(x) for x in layer_sizes]
+    layer_sizes = [len(x) for x in activities]
     v_spacing = 1 / max(layer_sizes)
-    h_spacing = 1 / len(layer_sizes)
+    h_spacing = 1 / (len(layer_sizes) + 1)
+
+    # Draw input edges
+    layer_top = v_spacing * (len(labels) - 1) / 2.0 + (top + bottom) / 2.0
+    for i, label in enumerate(labels):
+        text = plt.Text(
+            left - 0.05,
+            layer_top - i * v_spacing - 0.01,
+            label + "  ➤",
+            zorder=5,
+            horizontalalignment="center",
+            fontsize=16,
+        )
+        ax.add_artist(text)
+
     # Nodes
     for n, layer_size in enumerate(layer_sizes):
         layer_top = v_spacing * (layer_size - 1) / 2.0 + (top + bottom) / 2.0
 
         for m in range(layer_size):
-            center = (n * h_spacing + left, layer_top - m * v_spacing)
+            center = (n * h_spacing + left * 2, layer_top - m * v_spacing)
             radius = v_spacing / 4.0
             circle = plt.Circle(center, radius, color="w", ec="k", zorder=4)
             ax.add_artist(circle)
@@ -38,7 +52,7 @@ def draw_network(ax, layer_sizes, weights):
                     width = abs(weight) * 10  # Scale so it looks bigger
                     color = "b" if weight < 0 else "r"
                     line = plt.Line2D(
-                        [n * h_spacing + left, (n + 1) * h_spacing + left],
+                        [n * h_spacing + left * 2, (n + 1) * h_spacing + left * 2],
                         [layer_top_a - m * v_spacing, layer_top_b - o * v_spacing],
                         c=color,
                         lw=width,
@@ -105,14 +119,15 @@ class Simulation:
         ax2.axis("off")
         # Show the plot to start caching
         plt.show(block=False)
-        bg = f.canvas.copy_from_bbox(f.bbox)
+        # bg = f.canvas.copy_from_bbox(f.bbox)
         # Draw initial background
         img = ax1.imshow(
             self.env.render(mode="rgb_array"), animated=True
         )  # only call this once
         ax1.add_artist(img)
         action, state = ask_network(model, observation, state)
-        draw_network(ax2, activities, weights_from_network(model))
+        labels = self.env.observation_labels
+        draw_network(ax2, activities, weights_from_network(model), labels)
 
         # Loop until environment is done or user quits
         is_done = False
@@ -120,6 +135,7 @@ class Simulation:
             while not is_done:
                 # f.canvas.restore_region(bg)
                 display.clear_output(wait=True)
+                # f.canvas.restore_region(bg)
 
                 activities.clear()
                 action, state = ask_network(model, observation, state)

@@ -22,4 +22,8 @@ class Linear(torch.nn.Linear):
         super().__init__(in_size, out_size, bias=False)
         if weights is not None:
             weight_tensor = torch.tensor(weights, dtype=torch.float32)
+            assert weight_tensor.shape == (
+                out_size,
+                in_size,
+            ), f"Expected weights of shape ({out_size}, {in_size}), but got {weight_tensor.shape}"
             self.weight = torch.nn.Parameter(weight_tensor)

@@ -31,6 +31,8 @@ class GridworldEnv(gym.Env):
 
     MAX_SIZE = 500
 
+    observation_labels = ["Distance", "Angle"]
+
     action_space = spaces.Box(0, 1, shape=(2,))
     observation_space = spaces.MultiDiscrete([MAX_SIZE, MAX_SIZE])
     metadata = {"render.modes": ["rgb_array"], "video.frames_per_second": 30}
