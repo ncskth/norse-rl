@@ -1,19 +1,18 @@
-import gym
 import matplotlib
-import matplotlib.pyplot as plt
-import torch
-import norse.torch as norse
-import IPython.display as display
-import norse_rl  # Init environment
-
+from matplotlib import cm
 import matplotlib.gridspec as gridspec
+import matplotlib.pyplot as plt
+
+import torch
+
+import IPython.display as display
 
 
 def draw_network(ax, activities, weights, input_labels=[], output_labels=[]):
     # Thanks to https://stackoverflow.com/a/67289898/999865
     top = 0.9
     bottom = 0.1
-    left = 0.22
+    left = 0.23
     right = 0.81
     layer_sizes = [len(x) for x in activities]
     v_spacing = 1 / max(layer_sizes)
@@ -52,7 +51,7 @@ def draw_network(ax, activities, weights, input_labels=[], output_labels=[]):
         for m in range(layer_size):
             center = (x_coo[n], layer_top - m * v_spacing)
             radius = (v_spacing + h_spacing) / 8.0
-            circle = plt.Circle(center, radius, color="w", ec="k", zorder=4)
+            circle = plt.Circle(center, radius, ec="k", zorder=4)
             ax.add_artist(circle)
 
         # Edges
@@ -64,7 +63,7 @@ def draw_network(ax, activities, weights, input_labels=[], output_labels=[]):
             for m in range(layer_size_a):
                 for o in range(layer_size_b):
                     weight = weights[n][o][m]
-                    width = abs(weight) * 10  # Scale so it looks bigger
+                    width = abs(weight) * 6  # Scale so it looks bigger
                     color = "b" if weight < 0 else "r"
                     line = plt.Line2D(
                         [x_coo[n], x_coo[n + 1]],
@@ -75,13 +74,15 @@ def draw_network(ax, activities, weights, input_labels=[], output_labels=[]):
                     ax.add_artist(line)
 
 
-def draw_network_update(ax, spikes):
+def draw_network_update(ax, states):
     is_circle = lambda c: isinstance(c, matplotlib.patches.Circle)
     artists = list(filter(is_circle, ax.artists))
     index = 0
-    for layer in spikes:
-        for neuron in layer:
-            color = "b" if neuron else "w"
+    for state in states:
+        for v, i in zip(state.v, state.i):
+            # Ensure voltage is displayed as spike when i >= 1
+            v = 1.0 if i >= 1 else (v.clip(-1, 1).item() + 1) / 2
+            color = cm.coolwarm(v, bytes=False)
             artists[index].set_facecolor(color)
             index += 1
 
@@ -115,24 +116,24 @@ class Simulation:
         state = None
 
         # Setup spike activity hooks
-        activities = []
+        # activities = []
 
-        def forward_state_hook(mod, inp, out):
-            activities.append(out[0].detach())
+        # def forward_state_hook(mod, inp, out):
+        #     activities.append(out[0].detach())
 
-        try:
-            model.remove_forward_state_hooks()
-            model.forward_state_hooks.clear()
-            model.register_forward_state_hooks(forward_state_hook)
-        except:
-            pass  # Ignore if model already has registered hooks
+        # try:
+        #     model.remove_forward_state_hooks()
+        #     model.forward_state_hooks.clear()
+        #     model.register_forward_state_hooks(forward_state_hook)
+        # except:
+        #     pass  # Ignore if model already has registered hooks
 
         # Initialize plotting
         # Thanks to https://matplotlib.org/stable/tutorials/advanced/blitting.html
         f = plt.figure(tight_layout=True, figsize=(18, 8))
-        g = gridspec.GridSpec(1, 3)
-        ax1 = f.add_subplot(g[0, 0])
-        ax2 = f.add_subplot(g[0, 1:])
+        g = gridspec.GridSpec(1, 5)
+        ax1 = f.add_subplot(g[0, :2])
+        ax2 = f.add_subplot(g[0, 2:])
         ax1.axis("off")
         ax2.axis("off")
         plt.show(block=False)  # Show the plot to start caching
@@ -143,6 +144,7 @@ class Simulation:
         action, state = ask_network(model, observation, state)
         in_labels = self.env.observation_labels
         out_labels = self.env.action_labels
+        activities = [x for x in state if x is not None]
         draw_network(
             ax2, activities, weights_from_network(model), in_labels, out_labels
         )
@@ -153,8 +155,9 @@ class Simulation:
             while not is_done:
                 display.clear_output(wait=True)
 
-                activities.clear()
+                # activities.clear()
                 action, state = ask_network(model, observation, state)
+                activities = [x for x in state if x is not None]
                 observation, _, is_done, _ = self.env.step(action)
 
                 # Set visual changes

@@ -34,19 +34,19 @@ def test_food_pos():
    w = GridworldEnv(dt = 0.5)
    w.reset()
    w.food = [(MIDX, MIDY - 1)]
-   assert w._closest_food((MIDX, MIDY)) == (0.1, (MIDX, MIDY - 1))
+   assert w._closest_food((MIDX, MIDY)) == (w.DIST_SCALE, (MIDX, MIDY - 1))
 
 def test_food_pos_diagonal():
    w = GridworldEnv(dt = 0.5)
    w.reset()
    w.food = [(31, 30), (0, 0)]
-   assert w._closest_food((32, 32)) == (0.223606797749979, (31, 30))
+   assert w._closest_food((32, 32)) == (2.23606797749979 * w.DIST_SCALE, (31, 30))
 
 def test_step_observation():
    w = GridworldEnv(dt = 0.5)
    w.reset()
    w.food = [(MIDX, MIDY - 10)]
    obs, rew, end, _ = w.step([0, 0])
-   assert np.allclose(obs, np.array([1, 0]))
+   assert np.allclose(obs, np.array([10 * w.DIST_SCALE, math.pi / 2]), atol=1e-4)
    assert rew == 0
    assert not end
