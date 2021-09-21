@@ -6,6 +6,8 @@ here = pathlib.Path(__file__).parent.resolve()
 # Get the long description from the README file
 long_description = (here / "README.md").read_text(encoding="utf-8")
 
+requirements = (here / "requirements.txt").read_text(encoding="utf-8")
+
 # Arguments marked as "Required" below must be included for upload to PyPI.
 # Fields marked as "Optional" may be commented out.
 
@@ -66,7 +68,7 @@ setup(
     author_email="jeped@kth.se.",  # Optional
     # When your source code is in a subdirectory under the project root, e.g.
     # `src/`, it is necessary to specify the `package_dir` argument.
-    #package_dir={"norse_rl": "norse_rl"},  # Optional
+    # package_dir={"norse_rl": "norse_rl"},  # Optional
     # You can just specify package directories manually here if your project is
     # simple. Or you can use find_packages().
     #
@@ -88,5 +90,5 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=["gym", "matplotlib", "norse"],  # Optional
+    install_requires=requirements,  # Optional
 )
