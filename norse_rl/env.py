@@ -45,12 +45,12 @@ class GridworldEnv(gym.Env):
         self.food_items = food_items
         self.dt = dt
 
-    def _draw_square(self, img, x, y, color):
+    def _draw_square(self, img, x, y, color, size):
         x = int(x)
         y = int(y)
         img[
-            y - self.pixel_scale : y + self.pixel_scale,
-            x - self.pixel_scale : x + self.pixel_scale,
+            y - int(size/2) : y + int(size/2),
+            x - int(size/2) : x + int(size/2),
         ] = color
         return img
 
@@ -102,9 +102,9 @@ class GridworldEnv(gym.Env):
 
         # Draw food
         for (x, y) in self.food:
-            self._draw_square(img, x, y, [0, 1, 0])
+            self._draw_square(img, x, y, [246/255,195/255,53/255], 10)
         # Draw agent
-        self._draw_square(img, *self.state[:2], [1, 0, 0])
+        self._draw_square(img, *self.state[:2], [1, 0, 0], 60)
         return img
 
     def reset(self):
