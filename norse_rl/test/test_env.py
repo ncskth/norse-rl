@@ -47,6 +47,6 @@ def test_step_observation():
    w.reset()
    w.food = [(MIDX, MIDY - 10)]
    obs, rew, end, _ = w.step([0, 0])
-   assert np.allclose(obs, np.array([10 * w.DIST_SCALE, math.pi / 2]), atol=1e-4)
+   assert np.allclose(obs, np.array([10 * w.DIST_SCALE, -math.pi / 2]), atol=1e-4)
    assert rew == 0
    assert not end
