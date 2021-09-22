@@ -1,9 +1,12 @@
 import matplotlib
+import matplotlib.image as mpimg
+import scipy.ndimage as ndimage
 from matplotlib import cm
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
-
 import torch
+import time
+import math
 
 import IPython.display as display
 
@@ -105,6 +108,12 @@ def weights_from_network(model):
     ), "We require at least every second layer to be a linear layer"
     return weights
 
+def clearEnv(axis):
+
+    axis.cla()
+    axis.set(xlim=(0, 500), ylim=(0, 500))
+    axis.axes.xaxis.set_visible(False)
+    axis.axes.yaxis.set_visible(False)
 
 class Simulation:
     def __init__(self, env):
@@ -134,12 +143,18 @@ class Simulation:
         g = gridspec.GridSpec(1, 5)
         ax1 = f.add_subplot(g[0, :2])
         ax2 = f.add_subplot(g[0, 2:])
-        ax1.axis("off")
+
         ax2.axis("off")
         plt.show(block=False)  # Show the plot to start caching
+
         # Draw initial environment
         img = ax1.imshow(self.env.render(mode="rgb_array"), animated=True)
+
+        img_mouse = mpimg.imread('norse_rl/images/Mouse_60px.png')
+        s_m_2 = int(img_mouse.shape[0]/2)
+
         ax1.add_artist(img)
+
         # Draw initial network
         action, state = ask_network(model, observation, state)
         in_labels = self.env.observation_labels
@@ -151,6 +166,7 @@ class Simulation:
 
         # Loop until environment is done or user quits
         is_done = False
+        a = 0
         try:
             while not is_done:
                 display.clear_output(wait=True)
@@ -161,7 +177,15 @@ class Simulation:
                 observation, _, is_done, _ = self.env.step(action)
 
                 # Set visual changes
-                img.set_data(self.env.render(mode="rgb_array"))  # just update the data
+                clearEnv(ax1)
+                
+                # Draw Environment + Cheese + 'Mouse Tile'
+                ax1.imshow(self.env.render(mode="rgb_array"))  # just update the data
+                
+                # Draw Mouse
+                imgRot = ndimage.rotate((img_mouse*255).astype('uint8'), self.env.state[2]*180/math.pi, reshape=False)
+                ax1.imshow(imgRot, extent=(self.env.state[0]-s_m_2, self.env.state[0]+s_m_2, self.env.state[1]-s_m_2, self.env.state[1]+s_m_2))
+                
                 draw_network_update(ax2, activities)
 
                 # Render graphics

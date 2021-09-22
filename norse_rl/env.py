@@ -26,7 +26,6 @@ class GridworldEnv(gym.Env):
         Center, pointing east
     Episode Termination:
         None
-
     """
 
     MAX_SIZE = 500
@@ -46,12 +45,12 @@ class GridworldEnv(gym.Env):
         self.food_items = food_items
         self.dt = dt
 
-    def _draw_square(self, img, x, y, color):
+    def _draw_square(self, img, x, y, color, size):
         x = int(x)
         y = int(y)
         img[
-            y - self.pixel_scale : y + self.pixel_scale,
-            x - self.pixel_scale : x + self.pixel_scale,
+            y - int(size/2) : y + int(size/2),
+            x - int(size/2) : x + int(size/2),
         ] = color
         return img
 
@@ -86,9 +85,14 @@ class GridworldEnv(gym.Env):
             reward = 0
 
         # Define angle to food
-        x = self.state[0] - food_pos[0]
-        y = self.state[1] - food_pos[1]
-        angle = np.math.atan2(y, x)
+        x = food_pos[0]-self.state[0]
+        y = food_pos[1]-self.state[1]
+        angle = math.atan2(y,x)-self.state[2]
+        if angle > math.pi:
+            angle = angle - 2*math.pi
+        elif angle < -math.pi:
+            angle = angle + 2*math.pi
+
         return np.array([dist, angle]), reward
 
     def render(self, mode="rgb_array"):
@@ -98,9 +102,9 @@ class GridworldEnv(gym.Env):
 
         # Draw food
         for (x, y) in self.food:
-            self._draw_square(img, x, y, [0, 1, 0])
+            self._draw_square(img, x, y, [246/255,195/255,53/255], 10)
         # Draw agent
-        self._draw_square(img, *self.state[:2], [1, 0, 0])
+        self._draw_square(img, *self.state[:2], [1, 0, 0], 60)
         return img
 
     def reset(self):
@@ -135,7 +139,17 @@ class GridworldEnv(gym.Env):
 
         # Set new state and validate
         location = (self.state[:2] + np.array([d_x, d_y])).clip(0, self.MAX_SIZE)
-        self.state = np.array([*location, angle + d_rotation])
+        
+        new_angle = angle + d_rotation
+
+        if new_angle >= math.pi:
+            # print("%f to %f" %(new_angle*180/math.pi, (new_angle - 2*math.pi)*180/math.pi))
+            new_angle = new_angle - 2*math.pi
+        if new_angle <= -math.pi:
+            # print("%f to %f" %(new_angle*180/math.pi, (new_angle + 2*math.pi)*180/math.pi))
+            new_angle = new_angle + 2*math.pi
+
+        self.state = np.array([*location, new_angle])
 
         # Define observation
         observation, reward = self._observe()
