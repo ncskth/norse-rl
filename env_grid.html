@@ -51,7 +51,7 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Markdown Files" href="markdown.html" />
+    <link rel="prev" title="Welcome to Tutorials IX: Hands-on Competition / Neuromorphic Robotics Olympics" href="intro.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -93,11 +93,6 @@
  </li>
 </ul>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="markdown.html">
-   Markdown Files
-  </a>
- </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Reinforcement learning with spiking neural networks
@@ -220,32 +215,10 @@
 <p><a class="reference external" href="https://colab.research.google.com/github/ncskth/norse-rl/blob/master/book/env_grid.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">dir</span><span class="p">(</span><span class="n">norse_rl</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;__builtins__&#39;,
- &#39;__cached__&#39;,
- &#39;__doc__&#39;,
- &#39;__file__&#39;,
- &#39;__loader__&#39;,
- &#39;__name__&#39;,
- &#39;__package__&#39;,
- &#39;__path__&#39;,
- &#39;__spec__&#39;,
- &#39;env&#39;,
- &#39;register&#39;]
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># @title Install prerequisites</span>
-<span class="c1">#!pip3 install matplotlib gym --quiet</span>
-<span class="c1">#!pip3 install git+https://github.com/norse/norse --quiet</span>
-<span class="c1">#!pip3 install git+https://github.com/ncskth/norse-rl --quiet</span>
+<span class="o">!</span>pip3 install matplotlib gym --quiet
+<span class="o">!</span>pip3 install git+https://github.com/norse/norse --quiet
+<span class="o">!</span>pip3 install git+https://github.com/ncskth/norse-rl --quiet
 
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="c1">#%config InlineBackend.close_figures=False </span>
@@ -267,38 +240,29 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_896732</span><span class="o">/</span><span class="mf">2956437680.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span> 
-<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="c1"># Setup simulation</span>
-<span class="ne">---&gt; </span><span class="mi">15</span> <span class="kn">from</span> <span class="nn">norse_rl</span> <span class="kn">import</span> <span class="n">simulate</span>
-<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="n">simulation</span> <span class="o">=</span> <span class="n">simulate</span><span class="o">.</span><span class="n">Simulation</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="n">run</span> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">run</span>
-
-<span class="ne">ImportError</span>: cannot import name &#39;simulate&#39; from &#39;norse_rl&#39; (/home/jens/norse-rl/.venv/lib/python3.8/site-packages/norse_rl/__init__.py)
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="p">]</span> 
-    <span class="p">,</span> <span class="p">[</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span> <span class="p">]</span> <span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Weight matrix</span>
+<span class="c1">#    columns = input neurons</span>
+<span class="c1">#    rows    = output neurons</span>
+<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mf">0.3</span><span class="p">,</span>  <span class="mi">3</span><span class="p">]</span> 
+    <span class="p">,</span> <span class="p">[</span> <span class="mi">3</span><span class="p">,</span>  <span class="mf">0.3</span><span class="p">]</span> <span class="p">]</span>
 
+<span class="c1">## Neural network</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">SequentialState</span><span class="p">(</span>
     <span class="n">norse</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">(),</span>
     <span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span>
     <span class="n">norse</span><span class="o">.</span><span class="n">LICell</span><span class="p">(),</span>
 <span class="p">)</span>
 
+<span class="c1">## Execute simulation</span>
 <span class="n">run</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/env_grid_3_0.png" src="_images/env_grid_3_0.png" />
+<img alt="_images/env_grid_2_0.png" src="_images/env_grid_2_0.png" />
 </div>
 </div>
 </div>
@@ -333,11 +297,11 @@
 <div class='prev-next-bottom'>
     
     <div id="prev">
-        <a class="left-prev" href="markdown.html" title="previous page">
+        <a class="left-prev" href="intro.html" title="previous page">
             <i class="prevnext-label fas fa-angle-left"></i>
             <div class="prevnext-info">
                 <p class="prevnext-label">previous</p>
-                <p class="prevnext-title">Markdown Files</p>
+                <p class="prevnext-title">Welcome to Tutorials IX: Hands-on Competition / Neuromorphic Robotics Olympics</p>
             </div>
         </a>
     </div>
