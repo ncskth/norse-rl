@@ -26,7 +26,6 @@ class GridworldEnv(gym.Env):
         Center, pointing east
     Episode Termination:
         None
-
     """
 
     MAX_SIZE = 500
@@ -86,9 +85,14 @@ class GridworldEnv(gym.Env):
             reward = 0
 
         # Define angle to food
-        x = self.state[0] - food_pos[0]
-        y = self.state[1] - food_pos[1]
-        angle = np.math.atan2(y, x)
+        x = food_pos[0]-self.state[0]
+        y = food_pos[1]-self.state[1]
+        angle = math.atan2(y,x)-self.state[2]
+        if angle > math.pi:
+            angle = angle - 2*math.pi
+        elif angle < -math.pi:
+            angle = angle + 2*math.pi
+
         return np.array([dist, angle]), reward
 
     def render(self, mode="rgb_array"):
@@ -135,7 +139,17 @@ class GridworldEnv(gym.Env):
 
         # Set new state and validate
         location = (self.state[:2] + np.array([d_x, d_y])).clip(0, self.MAX_SIZE)
-        self.state = np.array([*location, angle + d_rotation])
+        
+        new_angle = angle + d_rotation
+
+        if new_angle >= math.pi:
+            # print("%f to %f" %(new_angle*180/math.pi, (new_angle - 2*math.pi)*180/math.pi))
+            new_angle = new_angle - 2*math.pi
+        if new_angle <= -math.pi:
+            # print("%f to %f" %(new_angle*180/math.pi, (new_angle + 2*math.pi)*180/math.pi))
+            new_angle = new_angle + 2*math.pi
+
+        self.state = np.array([*location, new_angle])
 
         # Define observation
         observation, reward = self._observe()
