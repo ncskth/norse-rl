@@ -1,12 +1,9 @@
 import matplotlib
-import matplotlib.image as mpimg
-import scipy.ndimage as ndimage
 from matplotlib import cm
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
+
 import torch
-import time
-import math
 
 import IPython.display as display
 
@@ -17,7 +14,7 @@ def draw_network(ax, activities, weights, input_labels=[], output_labels=[]):
     bottom = 0.1
     left = 0.23
     right = 0.81
-    layer_sizes = [len(x) for x in activities]
+    layer_sizes = [len(x.v) for x in activities]
     v_spacing = 1 / max(layer_sizes)
     h_spacing = 1 / (len(layer_sizes) + 1.5)
 
@@ -78,6 +75,8 @@ def draw_network(ax, activities, weights, input_labels=[], output_labels=[]):
 
 
 def draw_network_update(ax, states):
+    #for state in states:
+    #    print(state)
     is_circle = lambda c: isinstance(c, matplotlib.patches.Circle)
     artists = list(filter(is_circle, ax.artists))
     index = 0
@@ -108,12 +107,6 @@ def weights_from_network(model):
     ), "We require at least every second layer to be a linear layer"
     return weights
 
-def clearEnv(axis):
-
-    axis.cla()
-    axis.set(xlim=(0, 500), ylim=(0, 500))
-    axis.axes.xaxis.set_visible(False)
-    axis.axes.yaxis.set_visible(False)
 
 class Simulation:
     def __init__(self, env):
@@ -124,37 +117,18 @@ class Simulation:
         observation = self.env.reset()
         state = None
 
-        # Setup spike activity hooks
-        # activities = []
-
-        # def forward_state_hook(mod, inp, out):
-        #     activities.append(out[0].detach())
-
-        # try:
-        #     model.remove_forward_state_hooks()
-        #     model.forward_state_hooks.clear()
-        #     model.register_forward_state_hooks(forward_state_hook)
-        # except:
-        #     pass  # Ignore if model already has registered hooks
-
         # Initialize plotting
         # Thanks to https://matplotlib.org/stable/tutorials/advanced/blitting.html
         f = plt.figure(tight_layout=True, figsize=(18, 8))
         g = gridspec.GridSpec(1, 5)
         ax1 = f.add_subplot(g[0, :2])
         ax2 = f.add_subplot(g[0, 2:])
-
+        ax1.axis("off")
         ax2.axis("off")
         plt.show(block=False)  # Show the plot to start caching
-
         # Draw initial environment
         img = ax1.imshow(self.env.render(mode="rgb_array"), animated=True)
-
-        img_mouse = mpimg.imread('norse_rl/images/Mouse_60px.png')
-        s_m_2 = int(img_mouse.shape[0]/2)
-
         ax1.add_artist(img)
-
         # Draw initial network
         action, state = ask_network(model, observation, state)
         in_labels = self.env.observation_labels
@@ -166,7 +140,6 @@ class Simulation:
 
         # Loop until environment is done or user quits
         is_done = False
-        a = 0
         try:
             while not is_done:
                 display.clear_output(wait=True)
@@ -177,15 +150,7 @@ class Simulation:
                 observation, _, is_done, _ = self.env.step(action)
 
                 # Set visual changes
-                clearEnv(ax1)
-                
-                # Draw Environment + Cheese + 'Mouse Tile'
-                ax1.imshow(self.env.render(mode="rgb_array"))  # just update the data
-                
-                # Draw Mouse
-                imgRot = ndimage.rotate((img_mouse*255).astype('uint8'), self.env.state[2]*180/math.pi, reshape=False)
-                ax1.imshow(imgRot, extent=(self.env.state[0]-s_m_2, self.env.state[0]+s_m_2, self.env.state[1]-s_m_2, self.env.state[1]+s_m_2))
-                
+                img.set_data(self.env.render(mode="rgb_array"))  # just update the data
                 draw_network_update(ax2, activities)
 
                 # Render graphics
