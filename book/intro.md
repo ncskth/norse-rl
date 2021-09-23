@@ -22,7 +22,7 @@ Depending on how sensors and actuators are connected, the vehicle exhibits diffe
 The connections between sensors and actuators for the simplest vehicles can be ipsilateral or contralateral, and excitatory or inhibitory, producing four combinations with different behaviours named fear, aggression, liking, and love. These correspond to biological positive and negative stimuli present in many animals species.
 
 
-![Closed loop](https://github.com/ncskth/norse-rl/blob/master/book/EnvAgentBrain.png)
+![Closed loop](https://github.com/ncskth/norse-rl/raw/master/book/EnvAgentBrain.png)
 
 ### Open Space (Task 2)
 
