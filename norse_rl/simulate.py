@@ -2,6 +2,7 @@ import matplotlib
 from matplotlib import cm
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
+from ipycanvas import Canvas, hold_canvas
 import time
 
 import torch
@@ -119,7 +120,6 @@ def weights_from_network(model):
     ), "We require at least every second layer to be a linear layer"
     return weights
 
-
 class Simulation:
     def __init__(self, env, show_fps: bool = False):
         self.env = env
@@ -130,33 +130,38 @@ class Simulation:
         observation = self.env.reset()
         state = None
 
-        # Initialize plotting
-        # Thanks to https://matplotlib.org/stable/tutorials/advanced/blitting.html
-        f = plt.figure(tight_layout=True, figsize=(10, 4))
-        # ax1, ax2 = f.subplots(1, 2)
-        g = gridspec.GridSpec(1, 6)
-        ax1 = f.add_subplot(g[0, :2])
-        ax2 = f.add_subplot(g[0, 2:])
-        ax1.axis("off")
-        ax2.axis("off")
-        plt.show(block=False)  # Show the plot to start caching
+        canvas = Canvas(width=800, height=400)
+        display.display(canvas)
+        canvas.font = '12px serif'
+        #canvas.layout.width = '100%'
+        # # Initialize plotting
+        # # Thanks to https://matplotlib.org/stable/tutorials/advanced/blitting.html
+        # f = plt.figure(tight_layout=True, figsize=(10, 4))
+        # # ax1, ax2 = f.subplots(1, 2)
+        # g = gridspec.GridSpec(1, 6)
+        # ax1 = f.add_subplot(g[0, :2])
+        # ax2 = f.add_subplot(g[0, 2:])
+        # ax1.axis("off")
+        # ax2.axis("off")
+        # plt.show(block=True)  # Show the plot to start caching
 
-        # Draw initial environment
-        img = ax1.imshow(self.env.render(mode="rgb_array"), animated=True)
-        ax1.add_artist(img)
+        # # Draw initial environment
+        # img = ax1.imshow(self.env.render(mode="rgb_array"), animated=True)
+        # ax1.add_artist(img)
 
         # Draw initial network
         action, state = ask_network(model, observation, state)
         in_labels = self.env.observation_labels
         out_labels = self.env.action_labels
         activities = [x for x in state if x is not None]
-        draw_network(
-            ax2, activities, weights_from_network(model), in_labels, out_labels
-        )
+        # draw_network(
+        #     ax2, activities, weights_from_network(model), in_labels, out_labels
+        # )
 
         # Draw fps
         if self.show_fps:
-            fps_artist = draw_fps(ax2, "0")
+            fps_text = ''
+        #    fps_artist = draw_fps(ax2, "0")
 
         # Loop until environment is done or user quits
         is_done = False
@@ -165,36 +170,42 @@ class Simulation:
         frame_start = time.time()
         try:
             while not is_done:
-                frame_diff = time.time() - frame_start
-                frame_start = time.time()
-                #display.clear_output(wait=True)
+                with hold_canvas(canvas):
+                    canvas.clear()
 
-                network_time = time.time()
-                action, state = ask_network(model, observation, state)
-                activities = [x for x in state if x is not None]
-                network_time = time.time() - network_time
-                env_time = time.time()
-                observation, _, is_done, _ = self.env.step(action)
-                env_time = time.time() - env_time
+                    frame_diff = time.time() - frame_start
+                    frame_start = time.time()
 
-                # Set visual changes
-                visual_time = time.time()
-                img.set_data(self.env.render(mode="rgb_array"))  # just update the data
-                draw_network_update(ax2, activities)
-                visual_time = time.time() - visual_time
+                    network_time = time.time()
+                    action, state = ask_network(model, observation, state)
+                    activities = [x for x in state if x is not None]
+                    network_time = time.time() - network_time
+                    env_time = time.time()
+                    observation, _, is_done, _ = self.env.step(action)
+                    env_time = time.time() - env_time
 
-                # Update fps and redraw every second
-                frames += 1
-                if self.show_fps and (time.time() - start_time) > 1:
-                    fps_artist.set_text(
-                        f"{frames / (time.time() - start_time):.1f}fps - {frame_diff:.2f}frame {network_time:.2f}net {env_time:.2f}env {visual_time:.2f}vis"
-                    )
-                    frames = 0
-                    start_time = time.time()
+                    # Set visual changes
+                    visual_time = time.time()
+                    # img.set_data(self.env.render(mode="rgb_array"))  # just update the data
+                    self.env.render(canvas)
+                    # draw_network_update(ax2, activities)
+                    visual_time = time.time() - visual_time
 
-                # Render graphics
-                f.canvas.blit(f.bbox)
-                f.canvas.flush_events()
-                display.display(f, clear=True)
+                    # Update fps and redraw every second
+                    frames += 1
+                    if self.show_fps and (time.time() - start_time) > 1:
+                        # fps_artist.set_text(
+                        #     f"{frames / (time.time() - start_time):.1f}fps - {frame_diff:.2f}frame {network_time:.2f}net {env_time:.2f}env {visual_time:.2f}vis"
+                        # )
+                        fps_text = f"{frames / (time.time() - start_time):.1f}fps - {frame_diff:.2f}frame {network_time:.2f}net {env_time:.2f}env {visual_time:.2f}vis"
+                        frames = 0
+                        start_time = time.time()
+
+                    canvas.fill_text(fps_text, 10, 32)
+                    # Render graphics
+                    # f.canvas.blit(f.bbox)
+                    # f.canvas.flush_events()
+                    #display.display(f, clear=True)
+                time.sleep(0.02)
         except KeyboardInterrupt:
             pass

@@ -32,7 +32,7 @@ class GridworldEnv(gym.Env):
         None
     """
 
-    MAX_SIZE = 500
+    MAX_SIZE = 400
     DIST_SCALE = 1 / math.sqrt(MAX_SIZE ** 2 + MAX_SIZE ** 2)
     ROTATION_SCALE = 1 / (math.pi * 2)
 
@@ -45,31 +45,40 @@ class GridworldEnv(gym.Env):
     metadata = {"render.modes": ["rgb_array"], "video.frames_per_second": 50}
     pixel_scale = 5
 
-    def __init__(self, food_items: int = 10, image_scale: float = 0.5, dt: float = 1.0):
+    def __init__(self, food_items: int = 10, image_scale: float = 1.0, dt: float = 1.0):
         assert food_items < self.MAX_SIZE, f"Food must be < {self.MAX_SIZE}"
         self.food_items = food_items
         self.image_scale = image_scale
         self.dt = dt
 
-    def _draw_square(self, img, x, y, color, size):
-        x_left = int((x - (size / 2)) * self.image_scale)
-        x_right = int((x + (size / 2)) * self.image_scale)
-        y_bottom = int((y + (size / 2)) * self.image_scale)
-        y_top = int((y - (size / 2)) * self.image_scale)
-        img[y_top:y_bottom, x_left:x_right] = color
-        return img
+    def _draw_square(self, canvas, x, y, color, size):
+        canvas.fill_style = color
+        canvas.fill_rect(
+            int((x - size / 2) * self.image_scale),
+            int((y - size / 2) * self.image_scale),
+            size,
+        )
+        return canvas
 
-    def _draw_agent(self, img, x, y, color):
-        size = 20
-        self._draw_square(img, x, y, color, size)
+    def _draw_agent(self, canvas, x, y, color):
+        size = 15
+        self._draw_square(canvas, x, y, color, size)
 
         # Draw "nose"
-        size = 30
-        dx = np.linspace(x, x + math.cos(self.state[-1]) * size, size)
-        dy = np.linspace(y, y - math.sin(self.state[-1]) * size, size)
-        for ax, ay in zip(dx, dy):
-            self._draw_square(img, ax, ay, color, 3)
-        return img
+        size = 20
+        canvas.stroke_style = color
+        canvas.stroke_width = 5.0
+        canvas.stroke_line(
+            x,
+            y,
+            x + math.cos(self.state[-1]) * size,
+            y - math.sin(self.state[-1]) * size,
+        )
+        # dx = np.linspace(x, x + math.cos(self.state[-1]) * size, size)
+        # dy = np.linspace(y, y - math.sin(self.state[-1]) * size, size)
+        # for ax, ay in zip(dx, dy):
+        #     self._draw_square(canvas, ax, ay, color, 3)
+        return canvas
 
     def _distribute_food(self):
         prob = np.random.random(self.observation_space.nvec)
@@ -94,7 +103,7 @@ class GridworldEnv(gym.Env):
     def _observe(self):
         # Define reward
         dist, food_pos = self._closest_food(self.state[:2])
-        if dist < self.DIST_SCALE * 5:  # Radius of 5
+        if dist < self.DIST_SCALE * 7:  # Radius of 5
             self.food.remove(food_pos)  # Delete food
             reward = 1
             dist, food_pos = self._closest_food(self.state[:2])
@@ -115,19 +124,19 @@ class GridworldEnv(gym.Env):
 
         return np.array([angle_left, angle_right]), reward
 
-    def render(self, mode="rgb_array"):
-        img = np.zeros(
-            (*[int(x * self.image_scale) for x in self.observation_space.nvec], 3)
-        )
+    def render(self, canvas):
+        # img = np.zeros(
+        #     (*[int(x * self.image_scale) for x in self.observation_space.nvec], 3)
+        # )
         if len(self.food) == 0:
             return img
 
         # Draw food
         for (x, y) in self.food:
-            self._draw_square(img, x, y, [246 / 255, 195 / 255, 53 / 255], 15)
+            self._draw_square(canvas, x, y, "rgb(246, 195, 53)", 10)
         # Draw agent
-        self._draw_agent(img, *self.state[:2], [1, 0, 0])
-        return img
+        self._draw_agent(canvas, *self.state[:2], "red")
+        return canvas
 
     def reset(self):
         # Init in center pointing east
