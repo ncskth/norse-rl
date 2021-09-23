@@ -51,7 +51,7 @@ def draw_network(ax, activities, weights, input_labels=[], output_labels=[]):
 
         for m in range(layer_size):
             center = (x_coo[n], layer_top - m * v_spacing)
-            radius = (v_spacing + h_spacing) / 8.0
+            radius = (v_spacing + h_spacing) / 12.0
             circle = plt.Circle(center, radius, ec="k", zorder=4)
             ax.add_artist(circle)
 
@@ -64,7 +64,7 @@ def draw_network(ax, activities, weights, input_labels=[], output_labels=[]):
             for m in range(layer_size_a):
                 for o in range(layer_size_b):
                     weight = weights[n][o][m]
-                    width = abs(weight) * 6  # Scale so it looks bigger
+                    width = abs(weight) * 5  # Scale so it looks bigger
                     color = "b" if weight < 0 else "r"
                     line = plt.Line2D(
                         [x_coo[n], x_coo[n + 1]],
@@ -76,8 +76,6 @@ def draw_network(ax, activities, weights, input_labels=[], output_labels=[]):
 
 
 def draw_network_update(ax, states):
-    #for state in states:
-    #    print(state)
     is_circle = lambda c: isinstance(c, matplotlib.patches.Circle)
     artists = list(filter(is_circle, ax.artists))
     index = 0

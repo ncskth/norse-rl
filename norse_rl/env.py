@@ -54,9 +54,9 @@ class GridworldEnv(gym.Env):
     def _draw_square(self, img, x, y, color, size):
         x_left = int((x - (size / 2)) * self.image_scale)
         x_right = int((x + (size / 2)) * self.image_scale)
-        y_bottom = int((y + int(size / 2)) * self.image_scale)
-        y_top = int((y - int(size / 2)) * self.image_scale)
-        img[y_top : y_bottom,x_left : x_right] = color
+        y_bottom = int((y + (size / 2)) * self.image_scale)
+        y_top = int((y - (size / 2)) * self.image_scale)
+        img[y_top:y_bottom, x_left:x_right] = color
         return img
 
     def _draw_agent(self, img, x, y, color):
@@ -64,10 +64,11 @@ class GridworldEnv(gym.Env):
         self._draw_square(img, x, y, color, size)
 
         # Draw "nose"
+        size = 13
         dx = np.linspace(x, x + math.cos(self.state[-1]) * size, size)
         dy = np.linspace(y, y - math.sin(self.state[-1]) * size, size)
         for ax, ay in zip(dx, dy):
-            self._draw_square(img, ax, ay, color, 1)
+            self._draw_square(img, ax, ay, color, 3)
         return img
 
     def _distribute_food(self):
@@ -93,7 +94,7 @@ class GridworldEnv(gym.Env):
     def _observe(self):
         # Define reward
         dist, food_pos = self._closest_food(self.state[:2])
-        if dist < self.DIST_SCALE * 5: # Radius of 5
+        if dist < self.DIST_SCALE * 5:  # Radius of 5
             self.food.remove(food_pos)  # Delete food
             reward = 1
             dist, food_pos = self._closest_food(self.state[:2])
@@ -115,7 +116,9 @@ class GridworldEnv(gym.Env):
         return np.array([angle_left, angle_right]), reward
 
     def render(self, mode="rgb_array"):
-        img = np.zeros((*[int(x * self.image_scale) for x in self.observation_space.nvec], 3))
+        img = np.zeros(
+            (*[int(x * self.image_scale) for x in self.observation_space.nvec], 3)
+        )
         if len(self.food) == 0:
             return img
 
@@ -156,8 +159,12 @@ class GridworldEnv(gym.Env):
         self.state = np.nan_to_num(self.state, 0)  # Remove NaN
 
         # Define observation
-        observation, reward = self._observe()
-        return observation, reward, len(self.food) == 0, {}
+        is_done = len(self.food) == 0
+        if is_done:
+            observation, reward = np.array([0, 0]), 0
+        else:
+            observation, reward = self._observe()
+        return observation, reward, is_done, {}
 
 
 if __name__ == "__main__":
