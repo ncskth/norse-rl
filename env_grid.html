@@ -44,9 +44,9 @@
     <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script >
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
+        const thebe_selector = ".thebe,.cell"
+        const thebe_selector_input = "pre,.cell_input div.highlight"
+        const thebe_selector_output = ".output,.cell_output"
     </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -180,7 +180,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/ncskth/norse-rl/master?urlpath=tree/book/env_grid.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD/v2/gh/ncskth/norse-rl/master?urlpath=tree/book/env_grid.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="_static/images/logo_binder.svg"
@@ -193,6 +193,9 @@
                     src="_static/images/logo_colab.png"
                     alt="Interact on Colab">Colab</button></a>
         
+        <button type="button" class="btn btn-secondary topbarbtn"
+            onclick="initThebeSBT()" title="Launch Thebe" data-toggle="tooltip" data-placement="left"><i
+                class="fas fa-play"></i><span style="margin-left: .4em;">Live Code</span></button>
         
     </div>
 </div>
@@ -202,6 +205,24 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#step-1-setup-the-environment">
+   Step 1: Setup the environment
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#step-2-program-your-brain">
+   Step 2: Program your “brain”
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -212,40 +233,35 @@
                 
   <div class="section" id="reinforcement-learning-with-spiking-neural-networks">
 <h1>Reinforcement learning with spiking neural networks<a class="headerlink" href="#reinforcement-learning-with-spiking-neural-networks" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference external" href="https://colab.research.google.com/github/ncskth/norse-rl/blob/master/book/env_grid.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p><a class="reference external" href="https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD?filepath=book%2Fenv_grid.ipynb"><img alt="Binder" src="https://mybinder.org/badge_logo.svg" /></a></p>
+<div class="section" id="step-1-setup-the-environment">
+<h2>Step 1: Setup the environment<a class="headerlink" href="#step-1-setup-the-environment" title="Permalink to this headline">¶</a></h2>
+<p>The code below creates a virtual environment and imports our neuron simulator. Press the <span style="font-size: 280%; line-height: 24px; vertical-align: bottom;">‣</span> button to execute the code.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># @title Install prerequisites</span>
-<span class="o">!</span>pip3 install matplotlib gym --quiet
-<span class="o">!</span>pip3 install git+https://github.com/norse/norse --quiet
-<span class="o">!</span>pip3 install git+https://github.com/ncskth/norse-rl --quiet
-
-<span class="o">%</span><span class="k">matplotlib</span> inline
-<span class="c1">#%config InlineBackend.close_figures=False </span>
-
-<span class="c1"># Setup environment</span>
-<span class="kn">import</span> <span class="nn">gym</span>
-<span class="kn">import</span> <span class="nn">norse_rl</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;Gridworld-v0&quot;</span><span class="p">)</span>
-
-<span class="c1"># Setup simulation</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup environment</span>
 <span class="kn">from</span> <span class="nn">norse_rl</span> <span class="kn">import</span> <span class="n">simulate</span>
-<span class="n">simulation</span> <span class="o">=</span> <span class="n">simulate</span><span class="o">.</span><span class="n">Simulation</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-<span class="n">run</span> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">run</span>
+<span class="n">run</span> <span class="o">=</span> <span class="n">simulate</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="s2">&quot;Gridworld-v0&quot;</span><span class="p">)</span>
 
 <span class="c1"># Import neuron simulator</span>
-<span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">norse</span>
 <span class="kn">from</span> <span class="nn">norse_rl.util</span> <span class="kn">import</span> <span class="n">Linear</span>
 </pre></div>
 </div>
 </div>
 </div>
+</div>
+<div class="section" id="step-2-program-your-brain">
+<h2>Step 2: Program your “brain”<a class="headerlink" href="#step-2-program-your-brain" title="Permalink to this headline">¶</a></h2>
+<p>You can now program your “brain” by defining</p>
+<ol class="simple">
+<li><p>a <strong>weight matrix</strong> that describes synapse connectivity strength and</p></li>
+<li><p>a <strong>neural network</strong> that describes how signals flow from top to bottom</p></li>
+</ol>
+<p>Press the <span style="font-size: 280%; line-height: 24px; vertical-align: bottom;">‣</span> button to execute the code.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Weight matrix</span>
-<span class="c1">#    columns = input neurons</span>
-<span class="c1">#    rows    = output neurons</span>
 <span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mf">0.3</span><span class="p">,</span>  <span class="mi">3</span><span class="p">]</span> 
     <span class="p">,</span> <span class="p">[</span> <span class="mi">3</span><span class="p">,</span>  <span class="mf">0.3</span><span class="p">]</span> <span class="p">]</span>
 
@@ -262,7 +278,8 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/env_grid_2_0.png" src="_images/env_grid_2_0.png" />
+<img alt="_images/env_grid_4_0.png" src="_images/env_grid_4_0.png" />
+</div>
 </div>
 </div>
 </div>
@@ -271,7 +288,7 @@
     {
         requestKernel: true,
         binderOptions: {
-            repo: "binder-examples/jupyter-stacks-datascience",
+            repo: "ncskth/norse-rl",
             ref: "master",
         },
         codeMirrorConfig: {
