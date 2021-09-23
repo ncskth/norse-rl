@@ -11,10 +11,10 @@ import IPython.display as display
 
 def draw_network(ax, activities, weights, input_labels=[], output_labels=[]):
     # Thanks to https://stackoverflow.com/a/67289898/999865
-    top = 0.9
-    bottom = 0.1
-    left = 0.23
-    right = 0.81
+    top = 0.99
+    bottom = 0.0
+    left = 0.22
+    right = 0.84
     layer_sizes = [len(x.v) for x in activities]
     v_spacing = 1 / max(layer_sizes)
     h_spacing = 1 / (len(layer_sizes) + 1.5)
@@ -23,9 +23,9 @@ def draw_network(ax, activities, weights, input_labels=[], output_labels=[]):
     layer_top = v_spacing * (len(input_labels) - 1) / 2.0 + (top + bottom) / 2.0
     for i, label in enumerate(input_labels):
         text = plt.Text(
-            0.06,
+            0.1,
             layer_top - i * v_spacing - 0.01,
-            label + "\n  ➤",
+            label + "\n\n  ➤",
             zorder=5,
             horizontalalignment="center",
             fontsize=16,
@@ -35,9 +35,9 @@ def draw_network(ax, activities, weights, input_labels=[], output_labels=[]):
     # Draw output labels
     for i, label in enumerate(output_labels):
         text = plt.Text(
-            0.95,
+            0.93,
             layer_top - i * v_spacing - 0.01,
-            " ➤ " + label,
+            label + "\n\n ➤",
             zorder=5,
             horizontalalignment="center",
             fontsize=16,
@@ -91,7 +91,7 @@ def draw_network_update(ax, states):
 def draw_fps(ax, fps):
     text = plt.Text(
         0.98,
-        0.98,
+        0.96,
         f"{fps}fps",
         zorder=5,
         horizontalalignment="right",
@@ -132,8 +132,9 @@ class Simulation:
 
         # Initialize plotting
         # Thanks to https://matplotlib.org/stable/tutorials/advanced/blitting.html
-        f = plt.figure(tight_layout=True, figsize=(18, 8))
-        g = gridspec.GridSpec(1, 5)
+        f = plt.figure(tight_layout=True, figsize=(10, 4))
+        # ax1, ax2 = f.subplots(1, 2)
+        g = gridspec.GridSpec(1, 6)
         ax1 = f.add_subplot(g[0, :2])
         ax2 = f.add_subplot(g[0, 2:])
         ax1.axis("off")

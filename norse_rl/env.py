@@ -60,11 +60,11 @@ class GridworldEnv(gym.Env):
         return img
 
     def _draw_agent(self, img, x, y, color):
-        size = 10
+        size = 20
         self._draw_square(img, x, y, color, size)
 
         # Draw "nose"
-        size = 13
+        size = 30
         dx = np.linspace(x, x + math.cos(self.state[-1]) * size, size)
         dy = np.linspace(y, y - math.sin(self.state[-1]) * size, size)
         for ax, ay in zip(dx, dy):
@@ -124,9 +124,9 @@ class GridworldEnv(gym.Env):
 
         # Draw food
         for (x, y) in self.food:
-            self._draw_square(img, x, y, [246 / 255, 195 / 255, 53 / 255], 10)
+            self._draw_square(img, x, y, [246 / 255, 195 / 255, 53 / 255], 15)
         # Draw agent
-        self._draw_agent(img, *self.state[:2], [1, 1, 0])
+        self._draw_agent(img, *self.state[:2], [1, 0, 0])
         return img
 
     def reset(self):
