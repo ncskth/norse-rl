@@ -7,7 +7,7 @@ In this session we are going to use 2 simulated physical systems, a cartpole and
 Cartpole is a pendulum with a center of gravity above its pivot point. It’s unstable, but can be controlled by moving the pivot point under the center of mass. The goal is to keep the cartpole balanced by applying appropriate forces to a pivot point.
 
 
-![Closed loop](https://github.com/ncskth/norse-rl/blob/master/book/CartPole.png)
+![Closed loop](https://github.com/ncskth/norse-rl/raw/master/book/CartPole.png)
 
 ### Equilibrium Task (Task 1)
 
@@ -42,4 +42,4 @@ The connections between sensors and actuators for the simplest vehicles can be i
 
 Located in Stockholm and affiliated to Kungliga Tekniska Hogskolan (KTH), we are the Neurocomputing Systems Lab.
 
-![ncs logo](https://github.com/ncskth/norse-rl/blob/master/book/ncs.png)
+![ncs logo](https://github.com/ncskth/norse-rl/raw/master/book/ncs.png)
