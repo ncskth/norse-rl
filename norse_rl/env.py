@@ -126,7 +126,7 @@ class GridworldEnv(gym.Env):
         for (x, y) in self.food:
             self._draw_square(img, x, y, [246 / 255, 195 / 255, 53 / 255], 10)
         # Draw agent
-        self._draw_agent(img, *self.state[:2], [1, 0, 0])
+        self._draw_agent(img, *self.state[:2], [1, 1, 0])
         return img
 
     def reset(self):

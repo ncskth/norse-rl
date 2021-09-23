@@ -2,8 +2,8 @@ import matplotlib
 from matplotlib import cm
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
+import time
 
-import gym
 import torch
 
 import IPython.display as display
@@ -88,6 +88,19 @@ def draw_network_update(ax, states):
             index += 1
 
 
+def draw_fps(ax, fps):
+    text = plt.Text(
+        0.98,
+        0.98,
+        f"{fps}fps",
+        zorder=5,
+        horizontalalignment="right",
+        fontsize=10,
+    )
+    ax.add_artist(text)
+    return text
+
+
 def ask_network(model, observation, state=None):
     observation = torch.tensor(observation, dtype=torch.float32)
     action, state = model(observation, state)
@@ -108,8 +121,9 @@ def weights_from_network(model):
 
 
 class Simulation:
-    def __init__(self, env):
+    def __init__(self, env, show_fps: bool = False):
         self.env = env
+        self.show_fps = show_fps
 
     def run(self, model):
         # Initialize environment and network
@@ -125,9 +139,11 @@ class Simulation:
         ax1.axis("off")
         ax2.axis("off")
         plt.show(block=False)  # Show the plot to start caching
+
         # Draw initial environment
         img = ax1.imshow(self.env.render(mode="rgb_array"), animated=True)
         ax1.add_artist(img)
+
         # Draw initial network
         action, state = ask_network(model, observation, state)
         in_labels = self.env.observation_labels
@@ -137,8 +153,14 @@ class Simulation:
             ax2, activities, weights_from_network(model), in_labels, out_labels
         )
 
+        # Draw fps
+        if self.show_fps:
+            fps_artist = draw_fps(ax2, "0")
+
         # Loop until environment is done or user quits
         is_done = False
+        frames = 0
+        start_time = time.time()
         try:
             while not is_done:
                 display.clear_output(wait=True)
@@ -152,15 +174,16 @@ class Simulation:
                 img.set_data(self.env.render(mode="rgb_array"))  # just update the data
                 draw_network_update(ax2, activities)
 
+                # Update fps and redraw every second
+                frames += 1
+                if self.show_fps and (time.time() - start_time) > 1:
+                    fps_artist.set_text(f"{frames / (time.time() - start_time):.1f}fps")
+                    frames = 0
+                    start_time = time.time()
+
                 # Render graphics
                 f.canvas.blit(f.bbox)
                 f.canvas.flush_events()
                 display.display(f)
         except KeyboardInterrupt:
             pass
-
-
-def setup(env_name, **kwargs):
-    env = gym.make(env_name, **kwargs)
-    simulation = Simulation(env)
-    return simulation.run
