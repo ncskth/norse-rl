@@ -23,8 +23,8 @@ def draw_network(
     # Thanks to https://stackoverflow.com/a/67289898/999865
     top = 0.99
     bottom = 0.0
-    left = 0.26
-    right = 0.82
+    left = 0.27
+    right = 0.81
     layer_sizes = [len(x.v) for x in states]
     v_spacing = 1 / max(layer_sizes)
     h_spacing = 1 / (len(layer_sizes) + 1.5)
@@ -43,7 +43,7 @@ def draw_network(
     for i, label in enumerate(output_labels):
         canvas.fill_text(
             "➤ " + label,
-            offsetx + width * 0.90,
+            offsetx + width * 0.89,
             height * layer_top - i * height * v_spacing,
         )
 
@@ -133,7 +133,6 @@ class Simulation:
         canvas = Canvas(width=900, height=400)
         display.display(canvas)
         canvas.font = "12px serif"
-        canvas.layout.width = '100%'
 
         # Draw initial network
         action, state = ask_network(model, observation, state)
