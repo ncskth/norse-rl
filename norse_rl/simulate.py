@@ -95,7 +95,7 @@ def draw_fps(ax, fps):
         f"{fps}fps",
         zorder=5,
         horizontalalignment="right",
-        fontsize=10,
+        fontsize=12,
     )
     ax.add_artist(text)
     return text
@@ -161,29 +161,39 @@ class Simulation:
         is_done = False
         frames = 0
         start_time = time.time()
+        frame_start = time.time()
         try:
             while not is_done:
-                display.clear_output(wait=True)
+                frame_diff = time.time() - frame_start
+                frame_start = time.time()
+                #display.clear_output(wait=True)
 
-                # activities.clear()
+                network_time = time.time()
                 action, state = ask_network(model, observation, state)
                 activities = [x for x in state if x is not None]
+                network_time = time.time() - network_time
+                env_time = time.time()
                 observation, _, is_done, _ = self.env.step(action)
+                env_time = time.time() - env_time
 
                 # Set visual changes
+                visual_time = time.time()
                 img.set_data(self.env.render(mode="rgb_array"))  # just update the data
                 draw_network_update(ax2, activities)
+                visual_time = time.time() - visual_time
 
                 # Update fps and redraw every second
                 frames += 1
                 if self.show_fps and (time.time() - start_time) > 1:
-                    fps_artist.set_text(f"{frames / (time.time() - start_time):.1f}fps")
+                    fps_artist.set_text(
+                        f"{frames / (time.time() - start_time):.1f}fps - {frame_diff:.2f}frame {network_time:.2f}net {env_time:.2f}env {visual_time:.2f}vis"
+                    )
                     frames = 0
                     start_time = time.time()
 
                 # Render graphics
                 f.canvas.blit(f.bbox)
                 f.canvas.flush_events()
-                display.display(f)
+                display.display(f, clear=True)
         except KeyboardInterrupt:
             pass
