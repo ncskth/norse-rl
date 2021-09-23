@@ -211,13 +211,8 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#step-1-setup-the-environment">
-   Step 1: Setup the environment
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#step-2-program-your-brain">
-   Step 2: Program your “brain”
+  <a class="reference internal nav-link" href="#program-your-brain">
+   Program your “brain”
   </a>
  </li>
 </ul>
@@ -234,25 +229,8 @@
   <div class="section" id="reinforcement-learning-with-spiking-neural-networks">
 <h1>Reinforcement learning with spiking neural networks<a class="headerlink" href="#reinforcement-learning-with-spiking-neural-networks" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference external" href="https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD?filepath=book%2Fenv_grid.ipynb"><img alt="Binder" src="https://mybinder.org/badge_logo.svg" /></a></p>
-<div class="section" id="step-1-setup-the-environment">
-<h2>Step 1: Setup the environment<a class="headerlink" href="#step-1-setup-the-environment" title="Permalink to this headline">¶</a></h2>
-<p>The code below creates a virtual environment and imports our neuron simulator. Press the <span style="font-size: 280%; line-height: 24px; vertical-align: bottom;">‣</span> button to execute the code.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup environment</span>
-<span class="kn">from</span> <span class="nn">norse_rl</span> <span class="kn">import</span> <span class="n">simulate</span>
-<span class="n">run</span> <span class="o">=</span> <span class="n">simulate</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="s2">&quot;Gridworld-v0&quot;</span><span class="p">)</span>
-
-<span class="c1"># Import neuron simulator</span>
-<span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">norse</span>
-<span class="kn">from</span> <span class="nn">norse_rl.util</span> <span class="kn">import</span> <span class="n">Linear</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="section" id="step-2-program-your-brain">
-<h2>Step 2: Program your “brain”<a class="headerlink" href="#step-2-program-your-brain" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="program-your-brain">
+<h2>Program your “brain”<a class="headerlink" href="#program-your-brain" title="Permalink to this headline">¶</a></h2>
 <p>You can now program your “brain” by defining</p>
 <ol class="simple">
 <li><p>a <strong>weight matrix</strong> that describes synapse connectivity strength and</p></li>
@@ -261,7 +239,9 @@
 <p>Press the <span style="font-size: 280%; line-height: 24px; vertical-align: bottom;">‣</span> button to execute the code.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Weight matrix</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">norse_rl.workshop</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1">## Weight matrix</span>
 <span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mf">0.3</span><span class="p">,</span>  <span class="mi">3</span><span class="p">]</span> 
     <span class="p">,</span> <span class="p">[</span> <span class="mi">3</span><span class="p">,</span>  <span class="mf">0.3</span><span class="p">]</span> <span class="p">]</span>
 
@@ -273,12 +253,12 @@
 <span class="p">)</span>
 
 <span class="c1">## Execute simulation</span>
-<span class="n">run</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="n">run</span><span class="p">(</span><span class="s2">&quot;Gridworld-v0&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">show_fps</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/env_grid_4_0.png" src="_images/env_grid_4_0.png" />
+<img alt="_images/env_grid_2_0.png" src="_images/env_grid_2_0.png" />
 </div>
 </div>
 </div>
