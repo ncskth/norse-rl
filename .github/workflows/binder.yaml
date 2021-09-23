@@ -14,3 +14,5 @@ jobs:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         IMAGE_NAME: "jegp/norse-rl" # this overrides the image name
+        BINDER_CACHE: true
+        PUBLIC_REGISTRY_CHECK: true
