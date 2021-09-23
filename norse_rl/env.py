@@ -125,12 +125,8 @@ class GridworldEnv(gym.Env):
         return np.array([angle_left, angle_right]), reward
 
     def render(self, canvas):
-        # img = np.zeros(
-        #     (*[int(x * self.image_scale) for x in self.observation_space.nvec], 3)
-        # )
         if len(self.food) == 0:
-            return img
-
+            return canvas
         # Draw food
         for (x, y) in self.food:
             self._draw_square(canvas, x, y, "rgb(246, 195, 53)", 10)

@@ -10,83 +10,82 @@ import torch
 import IPython.display as display
 
 
-def draw_network(ax, activities, weights, input_labels=[], output_labels=[]):
+def draw_network(
+    canvas,
+    states,
+    weights,
+    input_labels=[],
+    output_labels=[],
+    height=400,
+    width=500,
+    offsetx=400,
+):
     # Thanks to https://stackoverflow.com/a/67289898/999865
     top = 0.99
     bottom = 0.0
-    left = 0.22
-    right = 0.84
-    layer_sizes = [len(x.v) for x in activities]
+    left = 0.26
+    right = 0.82
+    layer_sizes = [len(x.v) for x in states]
     v_spacing = 1 / max(layer_sizes)
     h_spacing = 1 / (len(layer_sizes) + 1.5)
 
     # Draw input labels
+    canvas.font = "14px sans-serif"
     layer_top = v_spacing * (len(input_labels) - 1) / 2.0 + (top + bottom) / 2.0
     for i, label in enumerate(input_labels):
-        text = plt.Text(
-            0.1,
-            layer_top - i * v_spacing - 0.01,
-            label + "\n\n  ➤",
-            zorder=5,
-            horizontalalignment="center",
-            fontsize=16,
+        canvas.fill_text(
+            label + " ➤",
+            offsetx + width * 0.01,
+            height * layer_top - i * height * v_spacing,
         )
-        ax.add_artist(text)
 
     # Draw output labels
     for i, label in enumerate(output_labels):
-        text = plt.Text(
-            0.93,
-            layer_top - i * v_spacing - 0.01,
-            label + "\n\n ➤",
-            zorder=5,
-            horizontalalignment="center",
-            fontsize=16,
+        canvas.fill_text(
+            "➤ " + label,
+            offsetx + width * 0.90,
+            height * layer_top - i * height * v_spacing,
         )
-        ax.add_artist(text)
 
-    # Nodes
+    # Draw edges
     x_coo = torch.linspace(left, right, len(layer_sizes))
+    for n, (layer_size_a, layer_size_b) in enumerate(
+        zip(layer_sizes[:-1], layer_sizes[1:])
+    ):
+        layer_top_a = v_spacing * (layer_size_a - 1) / 2.0 + (top + bottom) / 2.0
+        layer_top_b = v_spacing * (layer_size_b - 1) / 2.0 + (top + bottom) / 2.0
+        for m in range(layer_size_a):
+            for o in range(layer_size_b):
+                weight = weights[n][o][m]
+                line_width = abs(weight.item()) * 5  # Scale so it looks bigger
+                # color = "black" if weight < 0 else "r"
+                x1 = offsetx + width * x_coo[n].item()
+                x2 = offsetx + width * x_coo[n + 1].item()
+                y1 = height * layer_top_a - height * m * v_spacing - 5
+                y2 = height * layer_top_b - height * o * v_spacing - 5
+                canvas.line_width = line_width
+                canvas.stroke_line(x1, y1, x2, y2)
+
+    # Draw Nodes
     for n, layer_size in enumerate(layer_sizes):
         layer_top = v_spacing * (layer_size - 1) / 2.0 + (top + bottom) / 2.0
-
+        state_n = states[n]
         for m in range(layer_size):
-            center = (x_coo[n], layer_top - m * v_spacing)
-            radius = (v_spacing + h_spacing) / 12.0
-            circle = plt.Circle(center, radius, ec="k", zorder=4)
-            ax.add_artist(circle)
-
-        # Edges
-        for n, (layer_size_a, layer_size_b) in enumerate(
-            zip(layer_sizes[:-1], layer_sizes[1:])
-        ):
-            layer_top_a = v_spacing * (layer_size_a - 1) / 2.0 + (top + bottom) / 2.0
-            layer_top_b = v_spacing * (layer_size_b - 1) / 2.0 + (top + bottom) / 2.0
-            for m in range(layer_size_a):
-                for o in range(layer_size_b):
-                    weight = weights[n][o][m]
-                    width = abs(weight) * 5  # Scale so it looks bigger
-                    color = "b" if weight < 0 else "r"
-                    line = plt.Line2D(
-                        [x_coo[n], x_coo[n + 1]],
-                        [layer_top_a - m * v_spacing, layer_top_b - o * v_spacing],
-                        c=color,
-                        lw=width,
-                    )
-                    ax.add_artist(line)
-
-
-def draw_network_update(ax, states):
-    is_circle = lambda c: isinstance(c, matplotlib.patches.Circle)
-    artists = list(filter(is_circle, ax.artists))
-    index = 0
-    for state in states:
-        for v, i in zip(state.v, state.i):
+            cx = offsetx + width * x_coo[n].item()
+            cy = height * layer_top - height * m * v_spacing - 5
+            radius = (v_spacing + h_spacing) / 12.0 * width
+            # Draw background
             # Ensure voltage is displayed as spike when i >= 1
-            v = 1.0 if i >= 1 else (v.clip(-1, 1).item() + 1) / 2
-            color = cm.coolwarm(v, bytes=False)
-            artists[index].set_facecolor(color)
-            index += 1
+            v, i = state_n.v[m], state_n.i[m]
+            v = 1.0 if i.item() >= 1 else (v.clip(-1, 1).item() + 1) / 2
+            color = cm.coolwarm(v, bytes=True)
+            color = f"rgb({color[0]},{color[1]},{color[2]})"
+            canvas.fill_style = color
+            canvas.fill_circle(cx, cy, radius)
+            # Draw stroke
+            canvas.line_width = 1
+            canvas.stroke_style = "black"
+            canvas.stroke_circle(cx, cy, radius)
 
 
 def draw_fps(ax, fps):
@@ -120,6 +119,7 @@ def weights_from_network(model):
     ), "We require at least every second layer to be a linear layer"
     return weights
 
+
 class Simulation:
     def __init__(self, env, show_fps: bool = False):
         self.env = env
@@ -130,37 +130,19 @@ class Simulation:
         observation = self.env.reset()
         state = None
 
-        canvas = Canvas(width=800, height=400)
+        canvas = Canvas(width=900, height=400)
         display.display(canvas)
-        canvas.font = '12px serif'
-        #canvas.layout.width = '100%'
-        # # Initialize plotting
-        # # Thanks to https://matplotlib.org/stable/tutorials/advanced/blitting.html
-        # f = plt.figure(tight_layout=True, figsize=(10, 4))
-        # # ax1, ax2 = f.subplots(1, 2)
-        # g = gridspec.GridSpec(1, 6)
-        # ax1 = f.add_subplot(g[0, :2])
-        # ax2 = f.add_subplot(g[0, 2:])
-        # ax1.axis("off")
-        # ax2.axis("off")
-        # plt.show(block=True)  # Show the plot to start caching
-
-        # # Draw initial environment
-        # img = ax1.imshow(self.env.render(mode="rgb_array"), animated=True)
-        # ax1.add_artist(img)
+        canvas.font = "12px serif"
+        canvas.layout.width = '100%'
 
         # Draw initial network
         action, state = ask_network(model, observation, state)
         in_labels = self.env.observation_labels
         out_labels = self.env.action_labels
-        activities = [x for x in state if x is not None]
-        # draw_network(
-        #     ax2, activities, weights_from_network(model), in_labels, out_labels
-        # )
 
         # Draw fps
         if self.show_fps:
-            fps_text = ''
+            fps_text = ""
         #    fps_artist = draw_fps(ax2, "0")
 
         # Loop until environment is done or user quits
@@ -175,7 +157,10 @@ class Simulation:
 
                     frame_diff = time.time() - frame_start
                     frame_start = time.time()
+                    canvas.fill_style = "rgb(50, 50, 50)"
+                    canvas.fill_rect(0, 0, 400, 400)
 
+                    # Run and draw environment
                     network_time = time.time()
                     action, state = ask_network(model, observation, state)
                     activities = [x for x in state if x is not None]
@@ -184,28 +169,29 @@ class Simulation:
                     observation, _, is_done, _ = self.env.step(action)
                     env_time = time.time() - env_time
 
+                    # Draw network
+                    draw_network(
+                        canvas,
+                        activities,
+                        weights_from_network(model),
+                        in_labels,
+                        out_labels,
+                    )
+
                     # Set visual changes
                     visual_time = time.time()
-                    # img.set_data(self.env.render(mode="rgb_array"))  # just update the data
                     self.env.render(canvas)
-                    # draw_network_update(ax2, activities)
                     visual_time = time.time() - visual_time
 
                     # Update fps and redraw every second
                     frames += 1
                     if self.show_fps and (time.time() - start_time) > 1:
-                        # fps_artist.set_text(
-                        #     f"{frames / (time.time() - start_time):.1f}fps - {frame_diff:.2f}frame {network_time:.2f}net {env_time:.2f}env {visual_time:.2f}vis"
-                        # )
                         fps_text = f"{frames / (time.time() - start_time):.1f}fps - {frame_diff:.2f}frame {network_time:.2f}net {env_time:.2f}env {visual_time:.2f}vis"
                         frames = 0
                         start_time = time.time()
 
-                    canvas.fill_text(fps_text, 10, 32)
-                    # Render graphics
-                    # f.canvas.blit(f.bbox)
-                    # f.canvas.flush_events()
-                    #display.display(f, clear=True)
+                    canvas.fill_style = "white"
+                    canvas.fill_text(fps_text, 10, 20)
                 time.sleep(0.02)
         except KeyboardInterrupt:
             pass
