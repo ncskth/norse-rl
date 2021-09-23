@@ -259,42 +259,6 @@
 </div>
 <div class="cell_output docutils container">
 <img alt="_images/env_grid_2_0.png" src="_images/env_grid_2_0.png" />
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_1269832</span><span class="o">/</span><span class="mf">2933647554.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span> 
-<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="c1">## Execute simulation</span>
-<span class="ne">---&gt; </span><span class="mi">15</span> <span class="n">run</span><span class="p">(</span><span class="s2">&quot;Gridworld-v0&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">show_fps</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="nn">~/norse-rl/norse_rl/workshop.py</span> in <span class="ni">run</span><span class="nt">(environment, model, **kwargs)</span>
-<span class="g g-Whitespace">     </span><span class="mi">18</span>         <span class="n">sim_args</span><span class="p">[</span><span class="s1">&#39;show_fps&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;show_fps&#39;</span><span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">19</span>     <span class="n">simulation</span> <span class="o">=</span> <span class="n">simulate</span><span class="o">.</span><span class="n">Simulation</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="o">**</span><span class="n">sim_args</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">20</span>     <span class="k">return</span> <span class="n">simulation</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-
-<span class="nn">~/norse-rl/norse_rl/simulate.py</span> in <span class="ni">run</span><span class="nt">(self, model)</span>
-<span class="g g-Whitespace">    </span><span class="mi">174</span>                 <span class="n">network_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">network_time</span>
-<span class="g g-Whitespace">    </span><span class="mi">175</span>                 <span class="n">env_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="ne">--&gt; </span><span class="mi">176</span>                 <span class="n">observation</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">is_done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">177</span>                 <span class="n">env_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">env_time</span>
-<span class="g g-Whitespace">    </span><span class="mi">178</span> 
-
-<span class="nn">~/norse-rl/norse_rl/env.py</span> in <span class="ni">step</span><span class="nt">(self, action, random_movement)</span>
-<span class="g g-Whitespace">    </span><span class="mi">164</span>             <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="mi">0</span>
-<span class="g g-Whitespace">    </span><span class="mi">165</span>         <span class="k">else</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">166</span>             <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observe</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">167</span>         <span class="k">return</span> <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">is_done</span><span class="p">,</span> <span class="p">{}</span>
-<span class="g g-Whitespace">    </span><span class="mi">168</span> 
-
-<span class="nn">~/norse-rl/norse_rl/env.py</span> in <span class="ni">_observe</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">103</span> 
-<span class="g g-Whitespace">    </span><span class="mi">104</span>         <span class="c1"># Define angle to food</span>
-<span class="ne">--&gt; </span><span class="mi">105</span>         <span class="n">x</span> <span class="o">=</span> <span class="n">food_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">106</span>         <span class="n">y</span> <span class="o">=</span> <span class="n">food_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">107</span>         <span class="n">target_angle</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="o">-</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-
-<span class="ne">TypeError</span>: &#39;NoneType&#39; object is not subscriptable
-</pre></div>
-</div>
 </div>
 </div>
 </div>
