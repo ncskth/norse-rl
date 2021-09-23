@@ -37,7 +37,7 @@ class GridworldEnv(gym.Env):
     ROTATION_SCALE = 1 / (math.pi * 2)
 
     action_labels = ["Left", "Right"]
-    observation_labels = ["Angle Left", "Angle Right"]
+    observation_labels = ["Left Angle", "Right Angle"]
 
     action_space = spaces.Box(0, 1, shape=(2,))
     observation_space = spaces.MultiDiscrete([MAX_SIZE, MAX_SIZE])
@@ -45,32 +45,29 @@ class GridworldEnv(gym.Env):
     metadata = {"render.modes": ["rgb_array"], "video.frames_per_second": 50}
     pixel_scale = 5
 
-    def __init__(self, food_items: int = 10, dt: float = 1.0):
+    def __init__(self, food_items: int = 10, image_scale: float = 0.5, dt: float = 1.0):
         assert food_items < self.MAX_SIZE, f"Food must be < {self.MAX_SIZE}"
         self.food_items = food_items
+        self.image_scale = image_scale
         self.dt = dt
 
     def _draw_square(self, img, x, y, color, size):
-        x = int(x)
-        y = int(y)
-        img[
-            y - int(size / 2) : y + int(size / 2),
-            x - int(size / 2) : x + int(size / 2),
-        ] = color
+        x_left = int((x - (size / 2)) * self.image_scale)
+        x_right = int((x + (size / 2)) * self.image_scale)
+        y_bottom = int((y + int(size / 2)) * self.image_scale)
+        y_top = int((y - int(size / 2)) * self.image_scale)
+        img[y_top : y_bottom,x_left : x_right] = color
         return img
 
     def _draw_agent(self, img, x, y, color):
-        x = int(x)
-        y = int(y)
         size = 10
-        img[
-            y - int(size / 2) : y + int(size / 2),
-            x - int(size / 2) : x + int(size / 2),
-        ] = color
+        self._draw_square(img, x, y, color, size)
+
+        # Draw "nose"
         dx = np.linspace(x, x + math.cos(self.state[-1]) * size, size)
         dy = np.linspace(y, y - math.sin(self.state[-1]) * size, size)
         for ax, ay in zip(dx, dy):
-            img[int(ay) - 1 : int(ay) + 1, int(ax) - 1 : int(ax) + 1] = color
+            self._draw_square(img, ax, ay, color, 1)
         return img
 
     def _distribute_food(self):
@@ -118,7 +115,7 @@ class GridworldEnv(gym.Env):
         return np.array([angle_left, angle_right]), reward
 
     def render(self, mode="rgb_array"):
-        img = np.zeros((*[x for x in self.observation_space.nvec], 3))
+        img = np.zeros((*[int(x * self.image_scale) for x in self.observation_space.nvec], 3))
         if len(self.food) == 0:
             return img
 

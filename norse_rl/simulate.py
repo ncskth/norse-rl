@@ -3,6 +3,7 @@ from matplotlib import cm
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 
+import gym
 import torch
 
 import IPython.display as display
@@ -24,7 +25,7 @@ def draw_network(ax, activities, weights, input_labels=[], output_labels=[]):
         text = plt.Text(
             0.06,
             layer_top - i * v_spacing - 0.01,
-            label + "  ➤",
+            label + "\n  ➤",
             zorder=5,
             horizontalalignment="center",
             fontsize=16,
@@ -159,3 +160,9 @@ class Simulation:
                 display.display(f)
         except KeyboardInterrupt:
             pass
+
+
+def setup(env_name, **kwargs):
+    env = gym.make(env_name, **kwargs)
+    simulation = Simulation(env)
+    return simulation.run
