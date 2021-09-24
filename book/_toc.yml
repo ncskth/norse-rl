@@ -6,3 +6,4 @@ root: intro
 chapters:
 - file: env_cartpole
 - file: env_grid
+- file: env_maze
