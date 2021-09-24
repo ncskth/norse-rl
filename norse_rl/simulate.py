@@ -25,7 +25,7 @@ def draw_network(
     # Thanks to https://stackoverflow.com/a/67289898/999865
     top = 0.99
     bottom = 0.0
-    left = 0.27
+    left = 0.28
     right = 0.81
     layer_sizes = [len(x.v) for x in states]
     v_spacing = 1 / max(layer_sizes)
@@ -33,12 +33,13 @@ def draw_network(
 
     # Draw input labels
     canvas.font = "14px sans-serif"
+    canvas.fill_style = "black"
     layer_top = v_spacing * (len(input_labels) - 1) / 2.0 + (top + bottom) / 2.0
     for i, label in enumerate(input_labels):
         canvas.fill_text(
             label + " ➤",
             offsetx + width * 0.01,
-            height * layer_top - i * height * v_spacing,
+            height - height * layer_top + i * height * v_spacing,
         )
 
     # Draw output labels
@@ -46,7 +47,7 @@ def draw_network(
         canvas.fill_text(
             "➤ " + label,
             offsetx + width * 0.89,
-            height * layer_top - i * height * v_spacing,
+            height - height * layer_top + i * height * v_spacing,
         )
 
     # Draw edges
@@ -59,7 +60,9 @@ def draw_network(
         for m in range(layer_size_a):
             for o in range(layer_size_b):
                 weight = weights[n][o][m]
-                weight_magnitude = max(0.001, abs(weight.item()) * 5)  # Scale so it looks bigger
+                weight_magnitude = max(
+                    0.001, abs(weight.item()) * 5
+                )  # Scale so it looks bigger
                 v = 1.0 if weight.item() >= 1 else (weight.clip(-1, 1).item() + 1) / 2
                 color = cm.coolwarm(v, bytes=True)
                 x1 = offsetx + width * x_coo[n].item()
@@ -125,9 +128,10 @@ def weights_from_network(model):
 
 
 class Simulation:
-    def __init__(self, env, show_fps: bool = False):
+    def __init__(self, env, show_fps: bool = False, fps_cap: int = 50):
         self.env = env
         self.show_fps = show_fps
+        self.fps_sleep = 1 / fps_cap
 
     def run(self, model):
         # Initialize environment and network
@@ -142,11 +146,7 @@ class Simulation:
         action, state = ask_network(model, observation, state)
         in_labels = self.env.observation_labels
         out_labels = self.env.action_labels
-
-        # Draw fps
-        if self.show_fps:
-            fps_text = ""
-        #    fps_artist = draw_fps(ax2, "0")
+        fps_text = ""
 
         # Loop until environment is done or user quits
         is_done = False
@@ -193,6 +193,6 @@ class Simulation:
 
                     canvas.fill_style = "white"
                     canvas.fill_text(fps_text, 10, 20)
-                time.sleep(0.02)
+                time.sleep(max(0, self.fps_sleep - (time.time() - frame_start)))
         except KeyboardInterrupt:
             pass

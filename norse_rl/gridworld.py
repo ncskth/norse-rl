@@ -1,4 +1,5 @@
 import math
+from pathlib import Path
 import random
 import time
 
@@ -49,15 +50,15 @@ class GridworldEnv(gym.Env):
     metadata = {"render.modes": ["rgb_array"], "video.frames_per_second": 50}
     pixel_scale = 5
 
-
-
     def __init__(self, food_items: int = 10, image_scale: float = 1.0, dt: float = 1.0):
         assert food_items < self.MAX_SIZE, f"Food must be < {self.MAX_SIZE}"
         self.food_items = food_items
         self.image_scale = image_scale
-        self.imgMouse = mpimg.imread('../norse_rl/images/Mouse_40px.png')
-        self.sizeMouse = int(self.imgMouse.shape[0])
         self.dt = dt
+        root = Path(__file__).parent.absolute()
+        self.imgMouse = mpimg.imread(root / "images/Mouse_40px.png")
+        self.imgCompleted = Image.from_file(root / "images/Completed_250px.png")
+        self.sizeMouse = int(self.imgMouse.shape[0])
 
     def _draw_square(self, canvas, x, y, color, size):
         canvas.fill_style = color
@@ -69,14 +70,24 @@ class GridworldEnv(gym.Env):
         return canvas
 
     def _draw_agent(self, canvas, x, y, color):
-        
-        imgRot = ndimage.rotate((self.imgMouse*255).astype('uint8'), self.state[2]*180/math.pi, reshape=False)
-        canvas.put_image_data(imgRot, self.state[0]*self.image_scale-self.sizeMouse/2 , self.state[1]*self.image_scale-self.sizeMouse/2)
-                    
+
+        imgRot = ndimage.rotate(
+            (self.imgMouse * 255).astype("uint8"),
+            self.state[2] * 180 / math.pi,
+            reshape=False,
+        )
+        canvas.put_image_data(
+            imgRot,
+            self.state[0] * self.image_scale - self.sizeMouse / 2,
+            self.state[1] * self.image_scale - self.sizeMouse / 2,
+        )
+
         return canvas
 
     def _distribute_food(self):
-        indices = np.random.randint(self.sizeMouse, self.MAX_SIZE-self.sizeMouse, size=(self.food_items,2))
+        indices = np.random.randint(
+            self.sizeMouse, self.MAX_SIZE - self.sizeMouse, size=(self.food_items, 2)
+        )
         self.food = indices.tolist()
 
     def _getAngle(self, food_pos):
@@ -111,7 +122,6 @@ class GridworldEnv(gym.Env):
         else:
             reward = 0
 
-        
         # Define angle to food
         if len(self.food) == 0:
             angle = 0
@@ -122,16 +132,16 @@ class GridworldEnv(gym.Env):
 
         return np.array([angle_left, angle_right]), reward
 
-
     def render(self, canvas):
         # Draw background
         canvas.fill_style = "rgb(50, 50, 50)"
         canvas.fill_rect(0, 0, 400, 400)
 
         if len(self.food) == 0:
-            imgCompleted = Image.from_file('../norse_rl/images/Completed_250px.png')
-            canvas.draw_image(imgCompleted, self.MAX_SIZE/2-125,self.MAX_SIZE/2-125)
-        else:            
+            canvas.draw_image(
+                self.imgCompleted, self.MAX_SIZE / 2 - 125, self.MAX_SIZE / 2 - 125
+            )
+        else:
             if len(self.food) == 0:
                 return canvas
             # Draw food
