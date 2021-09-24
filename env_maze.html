@@ -215,6 +215,24 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#how-to-program-your-brain">
+   How to program your “brain”
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -226,37 +244,102 @@
   <div class="section" id="task-3-mice-and-cheese-in-maze">
 <h1>Task 3: Mice and cheese in Maze<a class="headerlink" href="#task-3-mice-and-cheese-in-maze" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference external" href="https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD?filepath=book%2Fenv_maze.ipynb"><img alt="Binder" src="https://mybinder.org/badge_logo.svg" /></a></p>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>In this task, you are supposed to guide a small mouse to eat as much cheese as possible as fast as possible! In this environment, inspired by the one used in Task 2, the mouse not only processes ‘olfactory’ information (which is, by the way, enhanced by some notion of distance to cheese) but it also uses its whiskers to be able to detect walls. This sensory information will be vital to be able to find cheese in different suggested mazes.</p>
+</div>
+<div class="section" id="how-to-program-your-brain">
+<h2>How to program your “brain”<a class="headerlink" href="#how-to-program-your-brain" title="Permalink to this headline">¶</a></h2>
+<p>In the code cell below, you can program your “brain” by defining</p>
+<ol class="simple">
+<li><p>a <strong>weight matrix</strong> that describes synapse connectivity strength and</p></li>
+<li><p>a <strong>neural network</strong> that describes how signals flow from top to bottom</p></li>
+</ol>
+<p>Press the <span style="font-size: 280%; line-height: 24px; vertical-align: bottom;">‣</span> button to execute the code.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">norse_rl.workshop</span> <span class="kn">import</span> <span class="o">*</span>
 
-
-
-<span class="c1"># Weight matrix (only whiskers)</span>
-<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span>  <span class="mf">0.01</span><span class="p">,</span>  <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> 
-    <span class="p">,</span> <span class="p">[</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span> <span class="p">]</span>
-
-
 <span class="c1"># Weight matrix</span>
-<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mi">3</span><span class="p">,</span>  <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> 
-    <span class="p">,</span> <span class="p">[</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span> 
+    <span class="p">,</span> <span class="p">[</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span> <span class="p">]</span>
 
 <span class="c1">## Neural network</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">SequentialState</span><span class="p">(</span>
     <span class="n">norse</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">(),</span>
-    <span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span>
+    <span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span>
     <span class="n">norse</span><span class="o">.</span><span class="n">LICell</span><span class="p">(),</span>
 <span class="p">)</span>
 
 <span class="c1">## Execute simulation</span>
-<span class="n">run</span><span class="p">(</span><span class="s2">&quot;Mazeworld-v0&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">show_fps</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">run</span><span class="p">(</span><span class="s2">&quot;Mazeworld-v0&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "31467887b22847ec92e215a45e53662b", "version_major": 2, "version_minor": 0}
-</script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">norse_rl.workshop</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Weight matrix</span>
+<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mi">2</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span> 
+    <span class="p">,</span> <span class="p">[</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span> <span class="p">]</span>
+
+<span class="c1">## Neural network</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">SequentialState</span><span class="p">(</span>
+    <span class="n">norse</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">(),</span>
+    <span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span>
+    <span class="n">norse</span><span class="o">.</span><span class="n">LICell</span><span class="p">(),</span>
+<span class="p">)</span>
+
+<span class="c1">## Execute simulation</span>
+<span class="n">run</span><span class="p">(</span><span class="s2">&quot;Mazeworld-v0&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">norse_rl.workshop</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Weight matrix</span>
+<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mf">0.2</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]</span> 
+    <span class="p">,</span> <span class="p">[</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span> <span class="p">]</span>
+
+<span class="c1">## Neural network</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">SequentialState</span><span class="p">(</span>
+    <span class="n">norse</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">(),</span>
+    <span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span>
+    <span class="n">norse</span><span class="o">.</span><span class="n">LICell</span><span class="p">(),</span>
+<span class="p">)</span>
+
+<span class="c1">## Execute simulation</span>
+<span class="n">run</span><span class="p">(</span><span class="s2">&quot;Mazeworld-v0&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">norse_rl.workshop</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Weight matrix</span>
+<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span>  <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]</span> 
+    <span class="p">,</span> <span class="p">[</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">]</span> <span class="p">]</span>
+
+<span class="c1">## Neural network</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">SequentialState</span><span class="p">(</span>
+    <span class="n">norse</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">(),</span>
+    <span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span>
+    <span class="n">norse</span><span class="o">.</span><span class="n">LICell</span><span class="p">(),</span>
+<span class="p">)</span>
+
+<span class="c1">## Execute simulation</span>
+<span class="n">run</span><span class="p">(</span><span class="s2">&quot;Mazeworld-v0&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 </div>
 
