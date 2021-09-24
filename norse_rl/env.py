@@ -45,7 +45,7 @@ class GridworldEnv(gym.Env):
     metadata = {"render.modes": ["rgb_array"], "video.frames_per_second": 50}
     pixel_scale = 5
 
-    def __init__(self, food_items: int = 10, image_scale: float = 1.0, dt: float = 1.0):
+    def __init__(self, food_items: int = 3, image_scale: float = 1.0, dt: float = 1.0):
         assert food_items < self.MAX_SIZE, f"Food must be < {self.MAX_SIZE}"
         self.food_items = food_items
         self.image_scale = image_scale
@@ -90,6 +90,18 @@ class GridworldEnv(gym.Env):
             )
         )
 
+    def _getAngle(self, food_pos):
+        # Define angle to food
+        x = food_pos[0] - self.state[0]
+        y = food_pos[1] - self.state[1]
+        target_angle = math.atan2(-y, x)
+        current_angle = self.state[2]
+        angle = math.atan2(
+            math.sin(current_angle - target_angle),
+            math.cos(current_angle - target_angle),
+        )
+        return angle
+
     def _closest_food(self, position):
         min_dist = +math.inf
         min_pos = None
@@ -110,15 +122,12 @@ class GridworldEnv(gym.Env):
         else:
             reward = 0
 
+        
         # Define angle to food
-        x = food_pos[0] - self.state[0]
-        y = food_pos[1] - self.state[1]
-        target_angle = math.atan2(-y, x)
-        current_angle = self.state[2]
-        angle = math.atan2(
-            math.sin(current_angle - target_angle),
-            math.cos(current_angle - target_angle),
-        )
+        if len(self.food) == 0:
+            angle = 0
+        else:
+            angle = self._getAngle(food_pos)
         angle_left = max(0, -angle) * self.ROTATION_SCALE
         angle_right = max(0, angle) * self.ROTATION_SCALE
 
