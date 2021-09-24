@@ -59,8 +59,8 @@ class CartpoleEnv(gym.Env):
     """
 
     metadata = {"render.modes": ["human", "rgb_array"], "video.frames_per_second": 50}
-    observation_labels = ["Position", "Velocity", "Angle", "Angular Vel."]
-    action_labels = ["Push"]
+    observation_labels = ["Left ∠", "Right ∠", "Left ∠\nvelocity", "Right ∠\nvelocity"]
+    action_labels = ["Cart ⇆"]
     MAX_SIZE = 400
 
     def __init__(self):
@@ -71,7 +71,7 @@ class CartpoleEnv(gym.Env):
         self.length = 0.5  # actually half the pole's length
         self.polemass_length = self.masspole * self.length
         self.force_mag = 10.0
-        self.tau = 0.01  # seconds between state updates
+        self.tau = 0.005  # seconds between state updates
         self.kinematics_integrator = "euler"
         self.carttrans = [0, 0]
         self.poletrans = 0
@@ -106,7 +106,7 @@ class CartpoleEnv(gym.Env):
         return [seed]
 
     def step(self, action):
-        action = int(action[0]) # Convert tensor to int
+        action = 0 if action <= 0 else 1
         err_msg = "%r (%s) invalid" % (action, type(action))
         assert self.action_space.contains(action), err_msg
 
@@ -162,12 +162,22 @@ class CartpoleEnv(gym.Env):
             self.steps_beyond_done += 1
             reward = 0.0
 
-        return np.array(self.state, dtype=np.float32), reward, done, {}
+        return self._state_to_obs(self.state), reward, done, {}
+
+    @staticmethod
+    def _state_to_obs(state):
+        angle_left = max(0, -state[2]) 
+        angle_right = max(0, state[2])
+        vel_left = max(0, -state[3])
+        vel_right = max(0, state[3])
+        return np.array(
+            [angle_left, angle_right, vel_left, vel_right], dtype=np.float32
+        )
 
     def reset(self):
         self.state = self.np_random.uniform(low=-0.05, high=0.05, size=(4,))
         self.steps_beyond_done = None
-        return np.array(self.state, dtype=np.float32)
+        return self._state_to_obs(self.state)
 
     def render(self, canvas):
         screen_width = 400

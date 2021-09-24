@@ -17,7 +17,9 @@ def draw_network(
     states,
     weights,
     input_labels=[],
+    input_values=[],
     output_labels=[],
+    output_values=[],
     height=400,
     width=500,
     offsetx=400,
@@ -26,32 +28,37 @@ def draw_network(
     top = 0.99
     bottom = 0.0
     left = 0.285
-    right = 0.81
+    right = 0.80
     layer_sizes = [len(x.v) for x in states]
     v_spacing = 1 / max(layer_sizes)
     h_spacing = 1 / (len(layer_sizes) + 1.5)
 
     # Draw input labels
-    canvas.font = "14px sans-serif"
+    font_size = 16
+    line_height = font_size + 2
     canvas.fill_style = "black"
-    canvas.text_align = "right"
+    canvas.text_align = "center"
     layer_top = v_spacing * (len(input_labels) - 1) / 2.0 + (top + bottom) / 2.0
     for i, label in enumerate(input_labels):
-        canvas.fill_text(
-            label + " ➤",
-            offsetx + width * 0.21,
-            height - height * layer_top + i * height * v_spacing,
-        )
+        x = offsetx + width * 0.17
+        y = height - height * layer_top + i * height * v_spacing
+        canvas.font = f"{font_size - 2}px sans-serif"
+        canvas.fill_text(f"IN: {input_values[i]:.2f}", x, y - line_height)
+        canvas.font = f"{font_size}px sans-serif"
+        for i, line in enumerate(label.split("\n")):
+            canvas.fill_text(line, x, y + i * line_height)
 
     # Draw output labels
     canvas.text_align = "left"
     layer_top = v_spacing * (len(output_labels) - 1) / 2.0 + (top + bottom) / 2.0
     for i, label in enumerate(output_labels):
-        canvas.fill_text(
-            "➤ " + label,
-            offsetx + width * 0.89,
-            height - height * layer_top + i * height * v_spacing,
-        )
+        x = offsetx + width * 0.86
+        y = height - height * layer_top + i * height * v_spacing + 5
+        canvas.font = f"{font_size - 2}px sans-serif"
+        canvas.fill_text(f"OUT: {output_values[i]:.2f}", x, y - line_height)
+        canvas.font = f"{font_size}px sans-serif"
+        for i, line in enumerate(label.split("\n")):
+            canvas.fill_text(line, x, y + i * line_height)
 
     # Draw edges
     x_coo = torch.linspace(left, right, len(layer_sizes))
@@ -87,10 +94,9 @@ def draw_network(
             # Draw background
             # Ensure voltage is displayed as spike when i >= 1
             v, i = state_n.v[m], state_n.i[m]
-            v = 1.0 if i.item() >= 1 else (v.clip(-1, 1).item() + 1) / 2
+            v = 1.0 if i.item() >=1 else (v.clip(-1, 1).item() + 1) / 2
             color = cm.coolwarm(v, bytes=True)
-            color = f"rgb({color[0]},{color[1]},{color[2]})"
-            canvas.fill_style = color
+            canvas.fill_style = f"rgb({color[0]},{color[1]},{color[2]})"
             canvas.fill_circle(cx, cy, radius)
             # Draw stroke
             canvas.line_width = 1
@@ -167,6 +173,7 @@ class Simulation:
                     # Run and draw environment
                     network_time = time.time()
                     action, state = ask_network(model, observation, state)
+                    old_obs = observation
                     activities = [x for x in state if x is not None]
                     network_time = time.time() - network_time
                     env_time = time.time()
@@ -179,7 +186,9 @@ class Simulation:
                         activities,
                         weights_from_network(model),
                         in_labels,
+                        old_obs,
                         out_labels,
+                        action,
                     )
 
                     # Set visual changes
