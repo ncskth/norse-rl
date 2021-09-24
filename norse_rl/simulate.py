@@ -142,21 +142,39 @@ class Simulation:
         self.show_fps = show_fps
         self.fps_sleep = 1 / fps_cap
 
-    def run(self, model):
-        # Initialize environment and network
-        observation = self.env.reset()
-        state = None
-        iterations = 0
-        k = 1
-        nb_cheese = self.env.food_items
+
+    def show_score(self, canvas, iterations):
+
+        is_done = False
 
         try:
             level = self.env.level
         except:
             level = 0
 
+        max_it = 3000*(0.5 + level)
 
-        max_it = 3000*(1 + level * 2)
+        if iterations >= max_it:
+            try:
+                score = (self.env.food_items - len(self.env.food)) * max_it / iterations
+                canvas.fill_style = "rgb(50, 50, 50)"
+                canvas.fill_rect(20, 160, 360, 80)
+                canvas.font = "80px Courier New bolder"
+                canvas.fill_style = "red"
+                canvas.fill_text("Score: " + str(round(score)), 50, 225)
+            except:
+                score = 0
+
+            is_done = True
+
+        return is_done
+        
+
+    def run(self, model):
+        # Initialize environment and network
+        observation = self.env.reset()
+        state = None
+        iterations = 0
 
         canvas = Canvas(width=900, height=400)
         display.display(canvas)
@@ -218,17 +236,9 @@ class Simulation:
                     canvas.fill_text(fps_text, 10, 20)
                 time.sleep(max(0, self.fps_sleep - (time.time() - frame_start)))
 
-                nb_cheese = self.env.food_items - len(self.env.food)
                 iterations += 1
-                if iterations >= max_it:
-                    break
+                is_done = self.show_score(canvas, iterations)
         except KeyboardInterrupt:
             pass
 
-        # Get and show score
-        score = k * nb_cheese * max_it / iterations
-        canvas.fill_style = "rgb(50, 50, 50)"
-        canvas.fill_rect(20, 160, 360, 80)
-        canvas.font = "80px Courier New bolder"
-        canvas.fill_style = "red"
-        canvas.fill_text("Score: " + str(score), 50, 225)
+
