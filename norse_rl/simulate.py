@@ -60,11 +60,13 @@ def draw_network(
             for o in range(layer_size_b):
                 weight = weights[n][o][m]
                 weight_magnitude = max(0.001, abs(weight.item()) * 5)  # Scale so it looks bigger
-                # color = "black" if weight < 0 else "r"
+                v = 1.0 if weight.item() >= 1 else (weight.clip(-1, 1).item() + 1) / 2
+                color = cm.coolwarm(v, bytes=True)
                 x1 = offsetx + width * x_coo[n].item()
                 x2 = offsetx + width * x_coo[n + 1].item()
                 y1 = height - height * layer_top_a + height * m * v_spacing - 5
                 y2 = height - height * layer_top_b + height * o * v_spacing - 5
+                canvas.stroke_style = f"rgb({color[0]}, {color[1]}, {color[2]})"
                 canvas.line_width = weight_magnitude
                 canvas.stroke_line(x1, y1, x2, y2)
 
