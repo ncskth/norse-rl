@@ -4,5 +4,6 @@ ipywidgets
 jupyter-book
 matplotlib
 numpy
+scipy
 
 norse
