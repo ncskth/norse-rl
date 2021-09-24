@@ -4,6 +4,8 @@
 format: jb-book
 root: intro
 chapters:
+- file: started
 - file: env_cartpole
 - file: env_grid
 - file: env_maze
+- file: advanced
