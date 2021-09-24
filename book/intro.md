@@ -2,7 +2,10 @@
 
 In this workshop we are going to use *spiking neural networks* to control 2 simulated physical systems:
 a cartpole and a Braitenberg vehicle "mouse".
+This workshop is meant to give you hands-on experience with (virtual) neurorobotics experiments, while hopefully also having a bit of fun.
+
 Everything will be run online in [Jupyter Notebooks](https://jupyter.org/), so not installation or setup is required.
+Just follow the instructions below.
 
 <p align="center">
 <img src="https://github.com/ncskth/norse-rl/raw/master/book/images/EnvAgentBrain.png"/>
@@ -33,8 +36,10 @@ More information about how to understand and operate spiking neural networks can
 
 ## Tasks
 
-We will be working with two different settings, resulting in three different neurorobotics tasks.
-Your job in this workshop will be to 
+We will be working with two different settings, resulting in three different neurorobotics tasks - and a final surprise competition!
+
+To get started with each task, click on the links below.
+
 
 |     Task      |    Description     |      Link      |
 | ------------- | ------------------ | -------------- | 
