@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Neuromorphic Robotics Olympics &#8212; Neurorobotics workshop</title>
+    <title>Advanced topics &#8212; Neurorobotics workshop</title>
     
   <link href="_static/css/theme.css" rel="stylesheet" />
   <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -51,7 +51,7 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Getting started with neural controls" href="started.html" />
+    <link rel="prev" title="Task 3: Mice and cheese in Maze" href="env_maze.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -81,13 +81,13 @@
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
         <ul class="nav bd-sidenav">
- <li class="toctree-l1 current">
-  <a class="reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
    Neuromorphic Robotics Olympics
   </a>
  </li>
 </ul>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="started.html">
    Getting started with neural controls
@@ -108,8 +108,8 @@
    Task 3: Mice and cheese in Maze
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="advanced.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Advanced topics
   </a>
  </li>
@@ -154,7 +154,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/intro.md"><button type="button"
+        <a class="dropdown-buttons" href="_sources/advanced.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -174,7 +174,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/ncskth/norse-rl/issues/new?title=Issue%20on%20page%20%2Fintro.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/ncskth/norse-rl/issues/new?title=Issue%20on%20page%20%2Fadvanced.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -195,55 +195,6 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   Neuromorphic Robotics Olympics
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#spiking-neural-networks-and-control-problems">
-     Spiking neural networks and control problems
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#tasks">
-     Tasks
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#cartpole">
-       1. Cartpole
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#braitenberg-vehicle">
-     2. Braitenberg vehicle
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#maze-task-3">
-       Maze (Task 3)
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#about-us">
-   About Us
-  </a>
- </li>
-</ul>
-
-            </nav>
         </div>
     </div>
 </div>
@@ -252,58 +203,11 @@
         
               <div>
                 
-  <div class="section" id="neuromorphic-robotics-olympics">
-<h1>Neuromorphic Robotics Olympics<a class="headerlink" href="#neuromorphic-robotics-olympics" title="Permalink to this headline">¶</a></h1>
-<p>In this workshop we are going to use <em>spiking neural networks</em> to control 2 simulated physical systems:
-a cartpole and a Braitenberg vehicle “mouse”.
-Everything will be run online in <a class="reference external" href="https://jupyter.org/">Jupyter Notebooks</a>, so not installation or setup is required.</p>
-<div class="section" id="spiking-neural-networks-and-control-problems">
-<h2>Spiking neural networks and control problems<a class="headerlink" href="#spiking-neural-networks-and-control-problems" title="Permalink to this headline">¶</a></h2>
-<p>Spiking neural networks are nonlinear systems that <strong>respond to input by integrating signals over time</strong>.
-Put differently, they react to signals with some <em>delay</em>.
-As an example, the <a class="reference external" href="https://neuronaldynamics.epfl.ch/online/Ch1.S3.html">leaky integrate-and-fire</a> (LIF) neuron model integrates some incoming current until a threshold is reached where it fires a signal (<code class="docutils literal notranslate"><span class="pre">1</span></code>). Until that point in time, the neuron was silent (<code class="docutils literal notranslate"><span class="pre">0</span></code>).</p>
-<div class="figure align-default" id="markdown-fig">
-<img alt="no-current" class="bg-primary mb-1" src="_images/spikes.gif" />
-<p class="caption"><span class="caption-number">Fig. 1 </span><span class="caption-text">Three examples of how the LIF neuron model responds to three different, but constant, input currents: 0.0, 0.1, and 0.3. At 0.3, we see that the neuron fires a series of spikes, followed by a membrane “reset”.
-Note that the neuron parameters are non-biological and that the memebrane voltage threshold is 1.</span><a class="headerlink" href="#markdown-fig" title="Permalink to this image">¶</a></p>
-</div>
-<p>For control problems, this is actually useful.
-We can interpret this firing/non-firing as a means to turn on and off a signal. On when the neuron is firing (<code class="docutils literal notranslate"><span class="pre">1</span></code>). Off when the neuron is silent (<code class="docutils literal notranslate"><span class="pre">0</span></code>).</p>
-<div class="margin sidebar">
-<p class="sidebar-title"></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>More information about how to understand and operate spiking neural networks can be found in <a class="reference internal" href="started.html#getting-started"><span class="std std-ref">Getting started with neural controls</span></a>.</p>
-</div>
-</div>
-<p>In this workshop, we will be exploiting these nonlinear neurondynamics to <em>intelligently</em> process sensory signals to achieve specific outcomes.</p>
-</div>
-<div class="section" id="tasks">
-<h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">¶</a></h2>
-<p>We will be working with two different settings, resulting in three different tasks you can solve.</p>
-<div class="section" id="cartpole">
-<h3>1. Cartpole<a class="headerlink" href="#cartpole" title="Permalink to this headline">¶</a></h3>
-<p>A cartpole is a pendulum with a center of gravity above its pivot point. It’s unstable, but can be controlled by moving the pivot point under the center of mass. The goal is to keep the cartpole balanced by applying appropriate forces to a pivot point.</p>
-<p><img alt="Closed loop" src="https://github.com/ncskth/norse-rl/raw/master/book/CartPole.png" /></p>
-</div>
-</div>
-<div class="section" id="braitenberg-vehicle">
-<h2>2. Braitenberg vehicle<a class="headerlink" href="#braitenberg-vehicle" title="Permalink to this headline">¶</a></h2>
-<p>A Braitenberg vehicle is an agent that can autonomously move around based on its sensor inputs. It has primitive sensors that measure some stimulus at a point, and actuators or effectors. In the simplest configuration, a sensor is directly connected to an effector, so that a sensed signal immediately produces a movement of the wheel.</p>
-<p>Depending on how sensors and actuators are connected, the vehicle exhibits different behaviors (which can be goal-oriented).</p>
-<p>The connections between sensors and actuators for the simplest vehicles can be ipsilateral or contralateral, and excitatory or inhibitory, producing four combinations with different behaviours named fear, aggression, liking, and love. These correspond to biological positive and negative stimuli present in many animals species.</p>
-<p><img alt="Closed loop" src="https://github.com/ncskth/norse-rl/raw/master/book/EnvAgentBrain.png" /></p>
-<div class="section" id="maze-task-3">
-<h3>Maze (Task 3)<a class="headerlink" href="#maze-task-3" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-</div>
-<div class="section" id="about-us">
-<h1>About Us<a class="headerlink" href="#about-us" title="Permalink to this headline">¶</a></h1>
-<p>Located in Stockholm and affiliated to Kungliga Tekniska Hogskolan (KTH), we are the Neurocomputing Systems Lab.</p>
-<p><img alt="ncs logo" src="https://github.com/ncskth/norse-rl/raw/master/book/ncs.png" /></p>
-<div class="toctree-wrapper compound">
-</div>
+  <div class="section" id="advanced-topics">
+<span id="page-advanced"></span><h1>Advanced topics<a class="headerlink" href="#advanced-topics" title="Permalink to this headline">¶</a></h1>
+<img src="https://raw.githubusercontent.com/norse/norse/master/logo.png">
+<p>The neuron simulator we used here is called <a class="reference external" href="https://github.com/norse/norse">Norse</a> and is <a class="reference external" href="https://github.com/norse/norse/#4-similar-work">one of many</a> simulators for neuron dynamics <em>similar</em> to biology.</p>
+<p>Norse is a library for <strong>deep learning with spiking neural networks</strong> which, roughly, means that they provide biologically realistic neurons that can be optimized with <em>both</em> biologically plausible learning rules <em>and</em> deep learning optimizations.</p>
 </div>
 
     <script type="text/x-thebe-config">
@@ -335,15 +239,15 @@ We can interpret this firing/non-firing as a means to turn on and off a signal. 
 
 <div class='prev-next-bottom'>
     
-     <div id="next">
-        <a class="right-next" href="started.html" title="next page">
+    <div id="prev">
+        <a class="left-prev" href="env_maze.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
             <div class="prevnext-info">
-                <p class="prevnext-label">next</p>
-                <p class="prevnext-title">Getting started with neural controls</p>
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">Task 3: Mice and cheese in Maze</p>
             </div>
-            <i class="prevnext-label fas fa-angle-right"></i>
         </a>
-     </div>
+    </div>
 
 </div>
         

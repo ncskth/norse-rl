@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Getting started with neural controls &#8212; Neurorobotics workshop</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe,.cell"
+        const thebe_selector_input = "pre,.cell_input div.highlight"
+        const thebe_selector_output = ".output,.cell_output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Task 1: Cartpole" href="env_cartpole.html" />
+    <link rel="prev" title="Neuromorphic Robotics Olympics" href="intro.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Neurorobotics workshop</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
+   Neuromorphic Robotics Olympics
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Getting started with neural controls
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="env_cartpole.html">
+   Task 1: Cartpole
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="env_grid.html">
+   Task 2: Mice and cheese
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="env_maze.html">
+   Task 3: Mice and cheese in Maze
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="advanced.html">
+   Advanced topics
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/started.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/ncskth/norse-rl"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/ncskth/norse-rl/issues/new?title=Issue%20on%20page%20%2Fstarted.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#leaky-integrator-neuron-models">
+   Leaky integrator neuron models
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#leaky-integrate-and-fire-neuron-models">
+   Leaky integrate-and-fire neuron models
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-spiking-neurons-for-control">
+   Using spiking neurons for control
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="getting-started-with-neural-controls">
+<span id="getting-started"></span><h1>Getting started with neural controls<a class="headerlink" href="#getting-started-with-neural-controls" title="Permalink to this headline">¶</a></h1>
+<p>Spiking neural systems are useful for control systems because we can exploit the temporal dynamics to react to stimulus in the environment.
+On this page, we will gloss over two types of nonlinear neuron models and provide examples on how we can solve simple problems with very simple mathematics and very few neurons</p>
+<div class="section" id="leaky-integrator-neuron-models">
+<h2>Leaky integrator neuron models<a class="headerlink" href="#leaky-integrator-neuron-models" title="Permalink to this headline">¶</a></h2>
+<p>One of the simplest neuron-like models is the <a class="reference external" href="https://en.wikipedia.org/wiki/Leaky_integrator">leaky integrator</a>.
+It simply takes some input current and integrates it over time.</p>
+<div class="figure align-default" id="started-li">
+<img alt="leaky integrator" class="bg-primary mb-1" src="_images/li.gif" />
+<p class="caption"><span class="caption-number">Fig. 2 </span><span class="caption-text">A leaky integrator that integrates current over time into its membrane potential.
+The left panel shows a constant input current while the right shows a current oscillating between <span class="math notranslate nohighlight">\([-0.1;0.1]A\)</span>.
+Note that the leaky integrator can produce <em>negative</em> membrane voltages.</span><a class="headerlink" href="#started-li" title="Permalink to this image">¶</a></p>
+</div>
+<p>This type of neuron provides a continuous voltage, indicating the amount of current it builds up over time.
+The neuron voltage (<span class="math notranslate nohighlight">\(v\)</span>) and current (<span class="math notranslate nohighlight">\(i\)</span>) evolves as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    \dot{v} &amp;= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+    \dot{i} &amp;= -1/\tau_{\text{syn}} i
+\end{align*}
+\end{split}\]</div>
+<p>The neuron model includes <a class="reference external" href="https://norse.github.io/norse/generated/norse.torch.functional.leaky_integrator.LIParameters.html#norse.torch.functional.leaky_integrator.LIParameters">parameters</a> like the synaptic integration time constant <span class="math notranslate nohighlight">\(\tau_{syn}\)</span> that determines the speed with which currents are integrated.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For more information about the leaky integrator, see the <a class="reference external" href="https://norse.github.io/norse/generated/norse.torch.module.leaky_integrator.LICell.html#norse.torch.module.leaky_integrator.LICell">LICell documentation page for Norse</a>.</p>
+</div>
+</div>
+<div class="section" id="leaky-integrate-and-fire-neuron-models">
+<h2>Leaky integrate-and-fire neuron models<a class="headerlink" href="#leaky-integrate-and-fire-neuron-models" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://neuronaldynamics.epfl.ch/online/Ch1.S3.html">leaky integrate-and-fire model</a> (LIF) is a popular choice for a neuron models because it is relatively simple to simulate, while still exhibiting interesting spiking dynamics.</p>
+<div class="figure align-default" id="started-lif">
+<img alt="no-current" class="bg-primary mb-1" src="_images/spikes.gif" />
+<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">Three examples of how the LIF neuron model responds to three different, but constant, input currents: 0.0, 0.1, and 0.3. At 0.3, we see that the neuron fires a series of spikes, followed by a membrane “reset”.
+Note that the neuron parameters are non-biological and that the memebrane voltage threshold is 1.</span><a class="headerlink" href="#started-lif" title="Permalink to this image">¶</a></p>
+</div>
+<p>The LIF model works like the leaky integrator, except when the neuron membrane voltage crosses the threshold <span class="math notranslate nohighlight">\(v_{th}\)</span>.
+If that happens, the membrane voltage resets and a spike (<code class="docutils literal notranslate"><span class="pre">1</span></code>) is emitted.
+In all other instances, the neuron outputs (<code class="docutils literal notranslate"><span class="pre">0</span></code>’s).
+From a control perspective, that is a quite interesting property because it resembles a binary “gate” that is either open or closed.</p>
+<p>The LIF dynamics are implemented as follows (note the similarity with the leaky integrator)</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\dot{v} &amp;= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+\dot{i} &amp;= -1/\tau_{\text{syn}} i
+\end{align*}
+\end{split}\]</div>
+<p>with the jump equation</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+    v &amp;= (1-z) v + z v_{\text{reset}}
+\end{align*}
+\]</div>
+<p>Where <span class="math notranslate nohighlight">\(z\)</span> represents a spiking tensors with values <span class="math notranslate nohighlight">\(\in \{0, 1\}\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For more information about the leaky integrate-and-fire model, see the <a class="reference external" href="https://norse.github.io/norse/generated/norse.torch.LIFCell.html">LIFCell documentation page for Norse</a>.</p>
+</div>
+</div>
+<div class="section" id="using-spiking-neurons-for-control">
+<h2>Using spiking neurons for control<a class="headerlink" href="#using-spiking-neurons-for-control" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-default" id="id1">
+<img alt="no-current" class="bg-primary mb-1" src="_images/EnvAgentBrain.png" />
+<p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">A closed control loop where an agent, controlled by a neural network, acts upon an environment that responds with observations (such as rewards, like cheese).</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p>Consider the following scenario: a mouse is walking around an environment looking for food.
+There is now a feedback loop between the mouse (agent) that 1) receives sensory observations, it can then 2) mull over in its artificial brain, so that it 3) can act upon the environment - probably with the hopes of fetching cheese.</p>
+<p>Zooming in on the brain, we can imagine the sensory signal (say, distance to cheese) can translate quite directly to a motor output: if the cheese if far away, go faster. Otherwise, stop and enjoy the cheese.
+If we have one neuron encoding for distance, then we have a small network that could look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">Distance</span>  <span class="o">---&gt;</span>  <span class="n">Leaky</span> <span class="n">integrator</span>  <span class="o">---&gt;</span>  <span class="n">Motor</span> <span class="n">neuron</span>
+</pre></div>
+</div>
+<p>Referring to <a class="reference internal" href="#started-li"><span class="std std-numref">the leaky-integrator above in Fig. 2</span></a>, we can inject a specific current into our leaky integrator and get:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="mf">0.1</span>       <span class="o">---&gt;</span>  <span class="n">Leaky</span> <span class="n">integrator</span>  <span class="o">---&gt;</span>  <span class="mf">0.5</span>
+</pre></div>
+</div>
+<p>Of course, 0.5 may be too much or too little, so it would be desirable to scale it with some factor.
+For that, we have weights:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="mf">0.1</span>       <span class="o">---&gt;</span>  <span class="n">Leaky</span> <span class="n">integrator</span>  <span class="o">---&gt;</span>  <span class="mf">0.5</span>  <span class="o">---&gt;</span>  <span class="n">Multiply</span> <span class="n">by</span> <span class="mi">2</span>  <span class="o">---&gt;</span>  <span class="mf">1.0</span>
+</pre></div>
+</div>
+<p>This is probably starting to look familiar to you.
+This closely resembles neural networks.
+And we can literally code this in Python using the neuron simulator <a class="reference external" href="https://github.com/norse/norse">Norse</a>:</p>
+<div class="margin sidebar">
+<p class="sidebar-title"></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are interested in understanding the code in depth, please refer to the page on <a class="reference internal" href="advanced.html#page-advanced"><span class="std std-ref">Advanced topics</span></a>.</p>
+</div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">norse</span>
+
+<span class="n">neuron</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">LICell</span><span class="p">()</span>
+<span class="n">voltage</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">neuron</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">scaled_output</span> <span class="o">=</span> <span class="n">voltage</span> <span class="o">*</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<p>Don’t worry about the details in the code.
+The most important thing is to understand that the code above is identical to the diagram we drew before: we create a leaky integrator (<code class="docutils literal notranslate"><span class="pre">LICell</span></code>), apply a certain current, and scale it by a factor of 2.</p>
+<p>The above building blocks are sufficient to understand what happens in our tasks, because the situation is exactly the same:</p>
+<ol class="simple">
+<li><p>We provide input to <code class="docutils literal notranslate"><span class="pre">n</span></code> neurons that each code for some signal (like distance to food)</p></li>
+<li><p>We read the neuron response output (like neuron voltage or spike)</p></li>
+<li><p>(Optional) We may repeat step 1-2 with additional layers of neurons</p></li>
+<li><p>We provide the neuron output to the environment and repeat</p></li>
+</ol>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "ncskth/norse-rl",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="intro.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">Neuromorphic Robotics Olympics</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="env_cartpole.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">Task 1: Cartpole</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Neurocomputing Systems, KTH<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>
