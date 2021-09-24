@@ -214,25 +214,6 @@
     <a class="reference internal nav-link" href="#tasks">
      Tasks
     </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#cartpole">
-       1. Cartpole
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#braitenberg-vehicle">
-     2. Braitenberg vehicle
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#maze-task-3">
-       Maze (Task 3)
-      </a>
-     </li>
-    </ul>
    </li>
   </ul>
  </li>
@@ -257,6 +238,9 @@
 <p>In this workshop we are going to use <em>spiking neural networks</em> to control 2 simulated physical systems:
 a cartpole and a Braitenberg vehicle “mouse”.
 Everything will be run online in <a class="reference external" href="https://jupyter.org/">Jupyter Notebooks</a>, so not installation or setup is required.</p>
+<p align="center">
+<img src="https://github.com/ncskth/norse-rl/raw/master/book/images/EnvAgentBrain.png"/>
+</p>
 <div class="section" id="spiking-neural-networks-and-control-problems">
 <h2>Spiking neural networks and control problems<a class="headerlink" href="#spiking-neural-networks-and-control-problems" title="Permalink to this headline">¶</a></h2>
 <p>Spiking neural networks are nonlinear systems that <strong>respond to input by integrating signals over time</strong>.
@@ -269,37 +253,42 @@ Note that the neuron parameters are non-biological and that the memebrane voltag
 </div>
 <p>For control problems, this is actually useful.
 We can interpret this firing/non-firing as a means to turn on and off a signal. On when the neuron is firing (<code class="docutils literal notranslate"><span class="pre">1</span></code>). Off when the neuron is silent (<code class="docutils literal notranslate"><span class="pre">0</span></code>).</p>
-<div class="margin sidebar">
-<p class="sidebar-title"></p>
+<p>In this workshop, we will be exploiting these nonlinear neurondynamics to <em>intelligently</em> process sensory signals to achieve specific outcomes.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>More information about how to understand and operate spiking neural networks can be found in <a class="reference internal" href="started.html#getting-started"><span class="std std-ref">Getting started with neural controls</span></a>.</p>
 </div>
 </div>
-<p>In this workshop, we will be exploiting these nonlinear neurondynamics to <em>intelligently</em> process sensory signals to achieve specific outcomes.</p>
-</div>
 <div class="section" id="tasks">
 <h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">¶</a></h2>
-<p>We will be working with two different settings, resulting in three different tasks you can solve.</p>
-<div class="section" id="cartpole">
-<h3>1. Cartpole<a class="headerlink" href="#cartpole" title="Permalink to this headline">¶</a></h3>
-<p>A cartpole is a pendulum with a center of gravity above its pivot point. It’s unstable, but can be controlled by moving the pivot point under the center of mass. The goal is to keep the cartpole balanced by applying appropriate forces to a pivot point.</p>
-<p align="center">
-<img src="https://github.com/ncskth/norse-rl/raw/master/book/images/CartPole.png"/>
-</p>
-</div>
-</div>
-<div class="section" id="braitenberg-vehicle">
-<h2>2. Braitenberg vehicle<a class="headerlink" href="#braitenberg-vehicle" title="Permalink to this headline">¶</a></h2>
-<p>A Braitenberg vehicle is an agent that can autonomously move around based on its sensor inputs. It has primitive sensors that measure some stimulus at a point, and actuators or effectors. In the simplest configuration, a sensor is directly connected to an effector, so that a sensed signal immediately produces a movement of the wheel.</p>
-<p>Depending on how sensors and actuators are connected, the vehicle exhibits different behaviors (which can be goal-oriented).</p>
-<p>The connections between sensors and actuators for the simplest vehicles can be ipsilateral or contralateral, and excitatory or inhibitory, producing four combinations with different behaviours named fear, aggression, liking, and love. These correspond to biological positive and negative stimuli present in many animals species.</p>
-<p align="center">
-<img src="https://github.com/ncskth/norse-rl/raw/master/book/images/EnvAgentBrain.png"/>
-</p>
-<div class="section" id="maze-task-3">
-<h3>Maze (Task 3)<a class="headerlink" href="#maze-task-3" title="Permalink to this headline">¶</a></h3>
-</div>
+<p>We will be working with two different settings, resulting in three different neurorobotics tasks.
+Your job in this workshop will be to</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Task</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Link</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1. <strong>Cartpole</strong></p></td>
+<td><p>Balance a wobbly cartpole</p></td>
+<td><p><a class="reference external" href="https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD?filepath=book%2Fenv_cartpole.ipynb"><strong>Click to start the experiment</strong> <img alt="Binder" src="https://mybinder.org/badge_logo.svg" /></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>2. <strong>Mice and cheese</strong></p></td>
+<td><p>Help a mouse find cheese</p></td>
+<td><p><a class="reference external" href="https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD?filepath=book%2Fenv_grid.ipynb"><strong>Click to start the experiment</strong> <img alt="Binder" src="https://mybinder.org/badge_logo.svg" /></a></p></td>
+</tr>
+<tr class="row-even"><td><p>3. <strong>Mice and mazes</strong></p></td>
+<td><p>Help a mouse find cheese, with obstacles!</p></td>
+<td><p><a class="reference external" href="https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD?filepath=book%2Fenv_grid.ipynb"><strong>Click to start the experiment</strong> <img alt="Binder" src="https://mybinder.org/badge_logo.svg" /></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>4. ?</p></td>
+<td><p>To be disclosed</p></td>
+<td><p>-</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="section" id="about-us">
@@ -307,7 +296,8 @@ We can interpret this firing/non-firing as a means to turn on and off a signal. 
 <p>Located in Stockholm and affiliated to Kungliga Tekniska Hogskolan (KTH), we are the Neurocomputing Systems Lab.</p>
 <p align="center">
 <img src="https://github.com/ncskth/norse-rl/raw/master/book/images/ncs.png" width="500px"/>
-</p><div class="toctree-wrapper compound">
+</p>
+<div class="toctree-wrapper compound">
 </div>
 </div>
 
