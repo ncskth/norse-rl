@@ -216,16 +216,6 @@ class CartpoleEnv(gym.Env):
         if self.state is None:
             return None
 
-        # Edit the pole polygon vertex
-        # pole = self._pole_geom
-        # l, r, t, b = (
-        #     -polewidth / 2,
-        #     polewidth / 2,
-        #     polelen - polewidth / 2,
-        #     -polewidth / 2,
-        # )
-        # pole.v = [(l, b), (l, t), (r, t), (r, b)]
-
         x = self.state
         cartx = x[0] * scale + screen_width / 2.0  # MIDDLE OF CART
         self.carttrans = cartx, carty

@@ -25,7 +25,7 @@ def draw_network(
     # Thanks to https://stackoverflow.com/a/67289898/999865
     top = 0.99
     bottom = 0.0
-    left = 0.28
+    left = 0.285
     right = 0.81
     layer_sizes = [len(x.v) for x in states]
     v_spacing = 1 / max(layer_sizes)
@@ -34,15 +34,18 @@ def draw_network(
     # Draw input labels
     canvas.font = "14px sans-serif"
     canvas.fill_style = "black"
+    canvas.text_align = "right"
     layer_top = v_spacing * (len(input_labels) - 1) / 2.0 + (top + bottom) / 2.0
     for i, label in enumerate(input_labels):
         canvas.fill_text(
             label + " ➤",
-            offsetx + width * 0.01,
+            offsetx + width * 0.21,
             height - height * layer_top + i * height * v_spacing,
         )
 
     # Draw output labels
+    canvas.text_align = "left"
+    layer_top = v_spacing * (len(output_labels) - 1) / 2.0 + (top + bottom) / 2.0
     for i, label in enumerate(output_labels):
         canvas.fill_text(
             "➤ " + label,
@@ -61,7 +64,7 @@ def draw_network(
             for o in range(layer_size_b):
                 weight = weights[n][o][m]
                 weight_magnitude = max(
-                    0.001, abs(weight.item()) * 5
+                    0.001, min(8, abs(weight.item())) * 5
                 )  # Scale so it looks bigger
                 v = 1.0 if weight.item() >= 1 else (weight.clip(-1, 1).item() + 1) / 2
                 color = cm.coolwarm(v, bytes=True)
