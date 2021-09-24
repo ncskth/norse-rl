@@ -231,4 +231,4 @@ class Simulation:
         canvas.fill_rect(20, 160, 360, 80)
         canvas.font = "80px Courier New bolder"
         canvas.fill_style = "red"
-        canvas.fill_text("Score: " + str(score), 50, 225)
+        canvas.fill_text("Score: " + str(round(score)), 50, 225)
