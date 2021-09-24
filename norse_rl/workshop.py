@@ -9,8 +9,8 @@ from norse_rl.util import Linear
 
 def run(environment:str , model: torch.nn.Module, **kwargs):
     env_args = {}
-    if 'image_scale' in kwargs:
-        env_args['image_scale'] = kwargs['image_scale']
+    if 'level' in kwargs:
+        env_args['level'] = kwargs['level']
     env = gym.make(environment, **env_args)
 
     sim_args = {}

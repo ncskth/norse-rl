@@ -146,6 +146,17 @@ class Simulation:
         # Initialize environment and network
         observation = self.env.reset()
         state = None
+        iterations = 0
+        k = 1
+        nb_cheese = self.env.food_items
+
+        try:
+            level = self.env.level
+        except:
+            level = 0
+
+
+        max_it = 3000*(1 + level * 2)
 
         canvas = Canvas(width=900, height=400)
         display.display(canvas)
@@ -206,5 +217,18 @@ class Simulation:
                     canvas.fill_style = "white"
                     canvas.fill_text(fps_text, 10, 20)
                 time.sleep(max(0, self.fps_sleep - (time.time() - frame_start)))
+
+                nb_cheese = self.env.food_items - len(self.env.food)
+                iterations += 1
+                if iterations >= max_it:
+                    break
         except KeyboardInterrupt:
             pass
+
+        # Get and show score
+        score = k * nb_cheese * max_it / iterations
+        canvas.fill_style = "rgb(50, 50, 50)"
+        canvas.fill_rect(20, 160, 360, 80)
+        canvas.font = "80px Courier New bolder"
+        canvas.fill_style = "red"
+        canvas.fill_text("Score: " + str(score), 50, 225)

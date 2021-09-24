@@ -42,7 +42,7 @@ class MazeworldEnv(gym.Env):
     ROTATION_SCALE = 1 / (math.pi * 2)
 
     action_labels = ["Left", "Right"]
-    observation_labels = ["Left Angle", "Right Angle", "Right Whisker", "Left Whisker"] 
+    observation_labels = ["Left ∠", "Right ∠", "Right\nWhisker", "Left\nWhisker", "Distance"] 
 
     action_space = spaces.Box(0, 1, shape=(2,))
     observation_space = spaces.MultiDiscrete([MAX_SIZE, MAX_SIZE])
@@ -50,7 +50,7 @@ class MazeworldEnv(gym.Env):
     metadata = {"render.modes": ["rgb_array"], "video.frames_per_second": 50}
     pixel_scale = 5
 
-    def __init__(self, food_items: int = 20, image_scale: float = 1.0, dt: float = 1.0, level: int = 2):
+    def __init__(self, food_items: int = 10, image_scale: float = 1.0, dt: float = 1.0, level: int = 1):
         assert food_items < self.MAX_SIZE, f"Food must be < {self.MAX_SIZE}"
         self.food_items = food_items
         self.image_scale = image_scale
@@ -109,6 +109,7 @@ class MazeworldEnv(gym.Env):
                 break
         
         file1.close()
+        self.food_items = len(self.food)
 
     def _draw_walls(self, canvas):
         for w in self.wall:
@@ -132,6 +133,7 @@ class MazeworldEnv(gym.Env):
             math.cos(current_angle - target_angle),
         )
         return angle
+
 
     def _closest_food(self, position):
         min_dist = +math.inf
@@ -164,7 +166,7 @@ class MazeworldEnv(gym.Env):
 
         # return np.array([angle_left, angle_right]), reward
         # return np.array([angle_left, angle_right, 0.5, 0.5]), reward
-        return np.array([angle_left, angle_right, self.state[3], self.state[4]]), reward
+        return np.array([angle_left, angle_right, self.state[3], self.state[4], dist]), reward
 
     def render(self, canvas):
         # Draw background
@@ -194,7 +196,7 @@ class MazeworldEnv(gym.Env):
         new_x = self.state[0] + d_x
         new_y = self.state[1] + d_y
         max_val = .5
-        inc_val = max_val/50
+        inc_val = max_val/1
         l_val = 0
         r_val = 0
 
