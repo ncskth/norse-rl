@@ -42,7 +42,7 @@ class MazeworldEnv(gym.Env):
     ROTATION_SCALE = 1 / (math.pi * 2)
 
     action_labels = ["Left", "Right"]
-    observation_labels = ["Left Angle", "Right Angle"]
+    observation_labels = ["Left ∠", "Right ∠", "Right\nWhisker", "Left\nWhisker", "Distance"] 
 
     action_space = spaces.Box(0, 1, shape=(2,))
     observation_space = spaces.MultiDiscrete([MAX_SIZE, MAX_SIZE])
@@ -50,7 +50,7 @@ class MazeworldEnv(gym.Env):
     metadata = {"render.modes": ["rgb_array"], "video.frames_per_second": 50}
     pixel_scale = 5
 
-    def __init__(self, food_items: int = 10, image_scale: float = 1.0, dt: float = 1.0, level: int = 2):
+    def __init__(self, food_items: int = 10, image_scale: float = 1.0, dt: float = 1.0, level: int = 1):
         assert food_items < self.MAX_SIZE, f"Food must be < {self.MAX_SIZE}"
         self.food_items = food_items
         self.image_scale = image_scale
@@ -60,6 +60,7 @@ class MazeworldEnv(gym.Env):
         self.imgCompleted = Image.from_file(self.root / "images/Completed_250px.png")
         self.sizeMouse = int(self.imgMouse.shape[0])
         self.wall = []
+        self.food = []
         self.level = level
         self.tileSize = 10
 
@@ -98,17 +99,21 @@ class MazeworldEnv(gym.Env):
             line = file1.readline()
             for x in range(len(line)):
                 if(line[x] == "#"):
-                    self.wall.append((x,y))
+                    self.wall.append(((x+0.5)*self.tileSize,(y+0.5)*self.tileSize))
+
+                if(line[x] == "*"):
+                    self.food.append(((x+0.5)*self.tileSize,(y+0.5)*self.tileSize))
         
             y += 1
             if not line:
                 break
         
         file1.close()
+        self.food_items = len(self.food)
 
     def _draw_walls(self, canvas):
         for w in self.wall:
-            self._draw_square(canvas, (w[0]+0.5)*self.tileSize, (w[1]+0.5)*self.tileSize, "rgb(153, 76, 0)", self.tileSize)
+            self._draw_square(canvas, w[0], w[1], "rgb(153, 76, 0)", self.tileSize)
 
         
     def _distribute_food(self):
@@ -129,6 +134,7 @@ class MazeworldEnv(gym.Env):
         )
         return angle
 
+
     def _closest_food(self, position):
         min_dist = +math.inf
         min_pos = None
@@ -142,7 +148,7 @@ class MazeworldEnv(gym.Env):
     def _observe(self):
         # Define reward
         dist, food_pos = self._closest_food(self.state[:2])
-        if dist < self.DIST_SCALE * 15:  # Radius of 5
+        if dist < self.DIST_SCALE * 20:  # Radius of 5
             self.food.remove(food_pos)  # Delete food
             reward = 1
             dist, food_pos = self._closest_food(self.state[:2])
@@ -156,8 +162,11 @@ class MazeworldEnv(gym.Env):
             angle = self._getAngle(food_pos)
         angle_left = max(0, -angle) * self.ROTATION_SCALE
         angle_right = max(0, angle) * self.ROTATION_SCALE
+        
 
-        return np.array([angle_left, angle_right]), reward
+        # return np.array([angle_left, angle_right]), reward
+        # return np.array([angle_left, angle_right, 0.5, 0.5]), reward
+        return np.array([angle_left, angle_right, self.state[3], self.state[4], dist]), reward
 
     def render(self, canvas):
         # Draw background
@@ -174,7 +183,7 @@ class MazeworldEnv(gym.Env):
 
             # Draw food
             for (x, y) in self.food:
-                self._draw_square(canvas, x, y, "rgb(246, 195, 53)", 10)
+                self._draw_square(canvas, x, y, "rgb(246, 195, 53)", self.tileSize)
             
             # Draw Walls
             self._draw_walls(canvas)
@@ -183,16 +192,71 @@ class MazeworldEnv(gym.Env):
             self._draw_agent(canvas, *self.state[:2], "red")
         return canvas
 
+    def _check_collisions(self, d_x, d_y):
+        new_x = self.state[0] + d_x
+        new_y = self.state[1] + d_y
+        max_val = .5
+        inc_val = max_val/1
+        l_val = 0
+        r_val = 0
+
+        for w in self.wall:
+            if abs(w[0]-self.state[0]) <= (self.tileSize + self.sizeMouse)/2:
+                if abs(w[1]-new_y) <= (self.tileSize + self.sizeMouse)/2:
+                    d_y = 0
+
+                    r_val = inc_val
+                    l_val = 0
+                    if self.state[2] < math.pi/2:
+                        r_val = 0
+                        l_val = inc_val
+                    if self.state[2] < 0:
+                        r_val = inc_val
+                        l_val = 0
+                    if self.state[2] < -math.pi/2:
+                        r_val = 0
+                        l_val = inc_val
+        
+
+            if abs(w[1]-self.state[1]) <= (self.tileSize + self.sizeMouse)/2:
+                if abs(w[0]-new_x) <= (self.tileSize + self.sizeMouse)/2:
+                    d_x = 0
+
+                    r_val = 0
+                    l_val = inc_val
+                    if self.state[2] < math.pi/2:
+                        r_val = inc_val
+                        l_val = 0
+                    if self.state[2] < 0:
+                        r_val = 0
+                        l_val = inc_val
+                    if self.state[2] < -math.pi/2:
+                        r_val = inc_val
+                        l_val = 0
+        
+
+        if r_val > 0:
+            self.state[3] = min(max_val, self.state[3] + r_val)
+        else:
+            self.state[3] = 0 
+
+        if l_val > 0:
+            self.state[4] = min(max_val, self.state[4] + l_val)
+        else:
+            self.state[4] = 0 
+                        
+        return d_x, d_y
+
     def reset(self):
         # Init in center pointing east
-        self.state = np.array([x // 2 for x in self.observation_space.nvec] + [0])
-        self._distribute_food()
+        self.state = np.array([x // 2 for x in self.observation_space.nvec] + [0] +[0] + [0])
         self._get_level()
         return self._observe()[0]
 
+
     def step(self, action, random_movement: bool = True):
         left_move, right_move = np.array(action).clip(0, 1)
-        angle = self.state[-1]
+        angle = self.state[2]
 
         distance = (min(right_move, left_move)) * self.dt
         if random_movement:
@@ -207,16 +271,19 @@ class MazeworldEnv(gym.Env):
         d_x = distance * math.cos(new_angle)
         d_y = -distance * math.sin(new_angle)
 
+        d_x, d_y = self._check_collisions(d_x, d_y)
+
         # Set new state and validate
         location = (self.state[:2] + np.array([d_x, d_y])).clip(0, self.MAX_SIZE)
 
-        self.state = np.array([*location, new_angle])
+        whiskers = self.state[3:5]
+        self.state = np.array([*location, new_angle, *whiskers])
         self.state = np.nan_to_num(self.state, 0)  # Remove NaN
 
         # Define observation
         is_done = len(self.food) == 0
         if is_done:
-            observation, reward = np.array([0, 0]), 0
+            observation, reward = np.array([0, 0, 0, 0]), 0
         else:
             observation, reward = self._observe()
         return observation, reward, is_done, {}
