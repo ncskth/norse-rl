@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Task 2: Mice and cheese &#8212; Neurorobotics workshop</title>
+    <title>Task 3: Mice and cheese in Maze &#8212; Neurorobotics workshop</title>
     
   <link href="_static/css/theme.css" rel="stylesheet" />
   <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -51,8 +51,7 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Task 3: Mice and cheese in Maze" href="env_maze.html" />
-    <link rel="prev" title="Task 1: Cartpole" href="env_cartpole.html" />
+    <link rel="prev" title="Task 2: Mice and cheese" href="env_grid.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -99,13 +98,13 @@
    Task 1: Cartpole
   </a>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="env_grid.html">
    Task 2: Mice and cheese
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="env_maze.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Task 3: Mice and cheese in Maze
   </a>
  </li>
@@ -150,7 +149,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/env_grid.ipynb"><button type="button"
+        <a class="dropdown-buttons" href="_sources/env_maze.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.ipynb</button></a>
         <!-- Download PDF via print -->
@@ -170,7 +169,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/ncskth/norse-rl/issues/new?title=Issue%20on%20page%20%2Fenv_grid.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/ncskth/norse-rl/issues/new?title=Issue%20on%20page%20%2Fenv_maze.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -191,7 +190,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/ncskth/norse-rl/master?urlpath=tree/book/env_grid.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/ncskth/norse-rl/master?urlpath=tree/book/env_maze.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="_static/images/logo_binder.svg"
@@ -199,7 +198,7 @@
         
         
         
-        <a class="colab-button" href="https://colab.research.google.com/github/ncskth/norse-rl/blob/master/book/env_grid.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+        <a class="colab-button" href="https://colab.research.google.com/github/ncskth/norse-rl/blob/master/book/env_maze.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
                 title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
                     src="_static/images/logo_colab.png"
                     alt="Interact on Colab">Colab</button></a>
@@ -216,24 +215,6 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#introduction">
-   Introduction
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-to-program-your-brain">
-   How to program your “brain”
-  </a>
- </li>
-</ul>
-
-            </nav>
         </div>
     </div>
 </div>
@@ -242,29 +223,16 @@
         
               <div>
                 
-  <div class="section" id="task-2-mice-and-cheese">
-<h1>Task 2: Mice and cheese<a class="headerlink" href="#task-2-mice-and-cheese" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference external" href="https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD?filepath=book%2Fenv_grid.ipynb"><img alt="Binder" src="https://mybinder.org/badge_logo.svg" /></a></p>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>In this task, you are supposed to guide a small mouse to eat as much cheese as possible! The environment itself is simple: a mouse is moving around looking for pieces of cheese spread out around it. The mouse can <em>smell</em> the cheese through two “nostrils”: a left nostril and a right nostril. The sensors emit strong signals when they detect a cheese that is far away from the mouse’s current orientation. Example: If there is a piece of cheese in a 90° angle to the <em>left</em> of the mouse, then the left nostril will emit a signal while the right nostril is silent.</p>
-<p>You goal? Pick up all the cheeses around the mouse - as fast as possible!</p>
-</div>
-<div class="section" id="how-to-program-your-brain">
-<h2>How to program your “brain”<a class="headerlink" href="#how-to-program-your-brain" title="Permalink to this headline">¶</a></h2>
-<p>In the code cell below, you can program your “brain” by defining</p>
-<ol class="simple">
-<li><p>a <strong>weight matrix</strong> that describes synapse connectivity strength and</p></li>
-<li><p>a <strong>neural network</strong> that describes how signals flow from top to bottom</p></li>
-</ol>
-<p>Press the <span style="font-size: 280%; line-height: 24px; vertical-align: bottom;">‣</span> button to execute the code.</p>
+  <div class="section" id="task-3-mice-and-cheese-in-maze">
+<h1>Task 3: Mice and cheese in Maze<a class="headerlink" href="#task-3-mice-and-cheese-in-maze" title="Permalink to this headline">¶</a></h1>
+<p>…</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">norse_rl.workshop</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="c1">## Weight matrix</span>
-<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span>  <span class="mi">2</span><span class="p">,</span>  <span class="mi">2</span><span class="p">]</span> 
-    <span class="p">,</span> <span class="p">[</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mi">2</span><span class="p">]</span> 
+    <span class="p">,</span> <span class="p">[</span> <span class="mi">2</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">]</span> <span class="p">]</span>
 
 <span class="c1">## Neural network</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">SequentialState</span><span class="p">(</span>
@@ -274,14 +242,9 @@
 <span class="p">)</span>
 
 <span class="c1">## Execute simulation</span>
-<span class="n">run</span><span class="p">(</span><span class="s2">&quot;Gridworld-v0&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">show_fps</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">run</span><span class="p">(</span><span class="s2">&quot;Mazeworld-v0&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">show_fps</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "e586138a6d514d5baa6acb3f219d0315", "version_major": 2, "version_minor": 0}
-</script></div>
 </div>
 </div>
 </div>
@@ -316,23 +279,14 @@
 <div class='prev-next-bottom'>
     
     <div id="prev">
-        <a class="left-prev" href="env_cartpole.html" title="previous page">
+        <a class="left-prev" href="env_grid.html" title="previous page">
             <i class="prevnext-label fas fa-angle-left"></i>
             <div class="prevnext-info">
                 <p class="prevnext-label">previous</p>
-                <p class="prevnext-title">Task 1: Cartpole</p>
+                <p class="prevnext-title">Task 2: Mice and cheese</p>
             </div>
         </a>
     </div>
-     <div id="next">
-        <a class="right-next" href="env_maze.html" title="next page">
-            <div class="prevnext-info">
-                <p class="prevnext-label">next</p>
-                <p class="prevnext-title">Task 3: Mice and cheese in Maze</p>
-            </div>
-            <i class="prevnext-label fas fa-angle-right"></i>
-        </a>
-     </div>
 
 </div>
         
