@@ -2,12 +2,14 @@ import matplotlib
 from matplotlib import cm
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+import scipy.ndimage as ndimage
 from ipycanvas import Canvas, hold_canvas
 import time
-
 import torch
-
 import IPython.display as display
+from ipywidgets import Image
+import math
 
 
 def draw_network(

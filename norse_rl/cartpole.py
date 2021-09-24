@@ -61,6 +61,7 @@ class CartpoleEnv(gym.Env):
     metadata = {"render.modes": ["human", "rgb_array"], "video.frames_per_second": 50}
     observation_labels = ["Position", "Velocity", "Angle", "Angular Vel."]
     action_labels = ["Push"]
+    MAX_SIZE = 400
 
     def __init__(self):
         self.gravity = 9.8
