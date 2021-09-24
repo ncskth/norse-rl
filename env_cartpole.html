@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reinforcement learning with spiking neural networks &#8212; Neurorobotics workshop</title>
+    <title>Task 1: Cartpole &#8212; Neurorobotics workshop</title>
     
   <link href="_static/css/theme.css" rel="stylesheet" />
   <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -51,6 +51,8 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Task 2: Mice and cheese" href="env_grid.html" />
+    <link rel="prev" title="Welcome to Tutorials IX: Hands-on Competition / Neuromorphic Robotics Olympics" href="intro.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -91,10 +93,15 @@
   </a>
  </li>
 </ul>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Task 1: Cartpole
+  </a>
+ </li>
  <li class="toctree-l1">
   <a class="reference internal" href="env_grid.html">
-   Reinforcement learning with spiking neural networks
+   Task 2: Mice and cheese
   </a>
  </li>
 </ul>
@@ -179,7 +186,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/ncskth/norse-rl/master?urlpath=lab/tree/book/env_cartpole.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/ncskth/norse-rl/master?urlpath=tree/book/env_cartpole.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="_static/images/logo_binder.svg"
@@ -225,8 +232,8 @@
         
               <div>
                 
-  <div class="section" id="reinforcement-learning-with-spiking-neural-networks">
-<h1>Reinforcement learning with spiking neural networks<a class="headerlink" href="#reinforcement-learning-with-spiking-neural-networks" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="task-1-cartpole">
+<h1>Task 1: Cartpole<a class="headerlink" href="#task-1-cartpole" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference external" href="https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD?filepath=book%2Fenv_cartpole.ipynb"><img alt="Binder" src="https://mybinder.org/badge_logo.svg" /></a></p>
 <div class="section" id="program-your-brain">
 <h2>Program your “brain”<a class="headerlink" href="#program-your-brain" title="Permalink to this headline">¶</a></h2>
@@ -241,7 +248,7 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">norse_rl.workshop</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="c1">## Weight matrix</span>
-<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mi">10</span><span class="p">,</span>  <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mi">5</span><span class="p">,</span>  <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="p">]</span>
 
 <span class="c1">## Neural network</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">SequentialState</span><span class="p">(</span>
@@ -257,7 +264,7 @@
 </div>
 <div class="cell_output docutils container">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "053296098eeb469281948ec5b687faed", "version_major": 2, "version_minor": 0}
+{"model_id": "3ded905d0702471f8def4681dc616cf0", "version_major": 2, "version_minor": 0}
 </script></div>
 </div>
 </div>
@@ -292,6 +299,24 @@
 
 <div class='prev-next-bottom'>
     
+    <div id="prev">
+        <a class="left-prev" href="intro.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">Welcome to Tutorials IX: Hands-on Competition / Neuromorphic Robotics Olympics</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="env_grid.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">Task 2: Mice and cheese</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
 
 </div>
         
