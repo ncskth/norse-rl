@@ -55,9 +55,8 @@ class GridworldEnv(gym.Env):
         self.food_items = food_items
         self.image_scale = image_scale
         self.dt = dt
-        root = Path(__file__).parent.absolute()
-        self.imgMouse = mpimg.imread(root / "images/Mouse_40px.png")
-        self.imgCompleted = Image.from_file(root / "images/Completed_250px.png")
+        self.imgMouse = mpimg.imread("images/Mouse_40px.png")
+        self.imgCompleted = Image.from_file("images/Completed_250px.png")
         self.sizeMouse = int(self.imgMouse.shape[0])
 
     def _draw_square(self, canvas, x, y, color, size):

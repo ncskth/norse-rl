@@ -4,7 +4,9 @@ In this workshop we are going to use *spiking neural networks* to control 2 simu
 a cartpole and a Braitenberg vehicle "mouse".
 Everything will be run online in [Jupyter Notebooks](https://jupyter.org/), so not installation or setup is required.
 
-
+<p align="center">
+<img src="https://github.com/ncskth/norse-rl/raw/master/book/images/EnvAgentBrain.png"/>
+</p>
 
 ## Spiking neural networks and control problems
 
@@ -22,41 +24,24 @@ Note that the neuron parameters are non-biological and that the memebrane voltag
 For control problems, this is actually useful. 
 We can interpret this firing/non-firing as a means to turn on and off a signal. On when the neuron is firing (`1`). Off when the neuron is silent (`0`).
 
-````{margin}
+In this workshop, we will be exploiting these nonlinear neurondynamics to *intelligently* process sensory signals to achieve specific outcomes.
+
 ```{note}
 More information about how to understand and operate spiking neural networks can be found in [Getting started with neural controls](getting-started).
 ```
-````
 
-In this workshop, we will be exploiting these nonlinear neurondynamics to *intelligently* process sensory signals to achieve specific outcomes.
 
 ## Tasks
 
-We will be working with two different settings, resulting in three different tasks you can solve.
+We will be working with two different settings, resulting in three different neurorobotics tasks.
+Your job in this workshop will be to 
 
-### 1. Cartpole
-
-A cartpole is a pendulum with a center of gravity above its pivot point. It’s unstable, but can be controlled by moving the pivot point under the center of mass. The goal is to keep the cartpole balanced by applying appropriate forces to a pivot point.
-
-<p align="center">
-<img src="https://github.com/ncskth/norse-rl/raw/master/book/images/CartPole.png"/>
-</p>
-
-## 2. Braitenberg vehicle
-
-A Braitenberg vehicle is an agent that can autonomously move around based on its sensor inputs. It has primitive sensors that measure some stimulus at a point, and actuators or effectors. In the simplest configuration, a sensor is directly connected to an effector, so that a sensed signal immediately produces a movement of the wheel.
-
-Depending on how sensors and actuators are connected, the vehicle exhibits different behaviors (which can be goal-oriented). 
-
-The connections between sensors and actuators for the simplest vehicles can be ipsilateral or contralateral, and excitatory or inhibitory, producing four combinations with different behaviours named fear, aggression, liking, and love. These correspond to biological positive and negative stimuli present in many animals species.
-
-<p align="center">
-<img src="https://github.com/ncskth/norse-rl/raw/master/book/images/EnvAgentBrain.png"/>
-</p>
-
-
-### Maze (Task 3)
-
+|     Task      |    Description     |      Link      |
+| ------------- | ------------------ | -------------- | 
+| 1. **Cartpole**      |  Balance a wobbly cartpole | [**Click to start the experiment** ![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD?filepath=book%2Fenv_cartpole.ipynb) |
+| 2. **Mice and cheese** |  Help a mouse find cheese | [**Click to start the experiment** ![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD?filepath=book%2Fenv_grid.ipynb) |
+| 3. **Mice and mazes** |  Help a mouse find cheese, with obstacles! | [**Click to start the experiment** ![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD?filepath=book%2Fenv_grid.ipynb) |
+| 4. ? |  To be disclosed | - |
 
 # About Us
 
@@ -65,3 +50,4 @@ Located in Stockholm and affiliated to Kungliga Tekniska Hogskolan (KTH), we are
 <p align="center">
 <img src="https://github.com/ncskth/norse-rl/raw/master/book/images/ncs.png" width="500px"/>
 </p>
+
