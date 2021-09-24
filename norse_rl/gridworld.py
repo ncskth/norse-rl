@@ -41,8 +41,8 @@ class GridworldEnv(gym.Env):
     DIST_SCALE = 1 / math.sqrt(MAX_SIZE ** 2 + MAX_SIZE ** 2)
     ROTATION_SCALE = 1 / (math.pi * 2)
 
-    action_labels = ["Left", "Right"]
-    observation_labels = ["Left Angle", "Right Angle"]
+    action_labels = ["Forward\nRight ⬊", "Forward\nLeft ⬈"]
+    observation_labels = ["Left ∠", "Right ∠"]
 
     action_space = spaces.Box(0, 1, shape=(2,))
     observation_space = spaces.MultiDiscrete([MAX_SIZE, MAX_SIZE])

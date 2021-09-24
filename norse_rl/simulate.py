@@ -27,8 +27,8 @@ def draw_network(
     # Thanks to https://stackoverflow.com/a/67289898/999865
     top = 0.99
     bottom = 0.0
-    left = 0.285
-    right = 0.80
+    left = 0.29
+    right = 0.78
     layer_sizes = [len(x.v) for x in states]
     v_spacing = 1 / max(layer_sizes)
     h_spacing = 1 / (len(layer_sizes) + 1.5)
@@ -40,7 +40,7 @@ def draw_network(
     canvas.text_align = "center"
     layer_top = v_spacing * (len(input_labels) - 1) / 2.0 + (top + bottom) / 2.0
     for i, label in enumerate(input_labels):
-        x = offsetx + width * 0.17
+        x = offsetx + width * 0.15
         y = height - height * layer_top + i * height * v_spacing
         canvas.font = f"{font_size - 2}px sans-serif"
         canvas.fill_text(f"IN: {input_values[i]:.2f}", x, y - line_height)
@@ -53,7 +53,7 @@ def draw_network(
     layer_top = v_spacing * (len(output_labels) - 1) / 2.0 + (top + bottom) / 2.0
     for i, label in enumerate(output_labels):
         x = offsetx + width * 0.86
-        y = height - height * layer_top + i * height * v_spacing + 5
+        y = height - height * layer_top + i * height * v_spacing
         canvas.font = f"{font_size - 2}px sans-serif"
         canvas.fill_text(f"OUT: {output_values[i]:.2f}", x, y - line_height)
         canvas.font = f"{font_size}px sans-serif"
