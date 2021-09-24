@@ -57,22 +57,22 @@ def draw_network(
         for m in range(layer_size_a):
             for o in range(layer_size_b):
                 weight = weights[n][o][m]
-                line_width = abs(weight.item()) * 5  # Scale so it looks bigger
+                weight_magnitude = max(0.001, abs(weight.item()) * 5)  # Scale so it looks bigger
                 # color = "black" if weight < 0 else "r"
                 x1 = offsetx + width * x_coo[n].item()
                 x2 = offsetx + width * x_coo[n + 1].item()
-                y1 = height * layer_top_a - height * m * v_spacing - 5
-                y2 = height * layer_top_b - height * o * v_spacing - 5
-                canvas.line_width = line_width
+                y1 = height - height * layer_top_a + height * m * v_spacing - 5
+                y2 = height - height * layer_top_b + height * o * v_spacing - 5
+                canvas.line_width = weight_magnitude
                 canvas.stroke_line(x1, y1, x2, y2)
 
     # Draw Nodes
     for n, layer_size in enumerate(layer_sizes):
-        layer_top = v_spacing * (layer_size - 1) / 2.0 + (top + bottom) / 2.0
+        layer_bot = v_spacing * (layer_size - 1) / 2.0 + (top + bottom) / 2.0
         state_n = states[n]
         for m in range(layer_size):
             cx = offsetx + width * x_coo[n].item()
-            cy = height * layer_top - height * m * v_spacing - 5
+            cy = height - height * layer_bot + height * m * v_spacing - 5
             radius = (v_spacing + h_spacing) / 12.0 * width
             # Draw background
             # Ensure voltage is displayed as spike when i >= 1
@@ -156,8 +156,6 @@ class Simulation:
 
                     frame_diff = time.time() - frame_start
                     frame_start = time.time()
-                    canvas.fill_style = "rgb(50, 50, 50)"
-                    canvas.fill_rect(0, 0, 400, 400)
 
                     # Run and draw environment
                     network_time = time.time()

@@ -136,6 +136,9 @@ class GridworldEnv(gym.Env):
     def render(self, canvas):
         if len(self.food) == 0:
             return canvas
+        # Draw background
+        canvas.fill_style = "rgb(50, 50, 50)"
+        canvas.fill_rect(0, 0, 400, 400)
         # Draw food
         for (x, y) in self.food:
             self._draw_square(canvas, x, y, "rgb(246, 195, 53)", 10)
