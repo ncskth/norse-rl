@@ -1,9 +1,13 @@
 import math
 import random
+import time
 
 import gym
 from gym import spaces
 import numpy as np
+import matplotlib.image as mpimg
+import scipy.ndimage as ndimage
+from ipywidgets import Image
 
 import norse_rl.util as util
 
@@ -45,10 +49,14 @@ class GridworldEnv(gym.Env):
     metadata = {"render.modes": ["rgb_array"], "video.frames_per_second": 50}
     pixel_scale = 5
 
-    def __init__(self, food_items: int = 3, image_scale: float = 1.0, dt: float = 1.0):
+
+
+    def __init__(self, food_items: int = 10, image_scale: float = 1.0, dt: float = 1.0):
         assert food_items < self.MAX_SIZE, f"Food must be < {self.MAX_SIZE}"
         self.food_items = food_items
         self.image_scale = image_scale
+        self.imgMouse = mpimg.imread('../norse_rl/images/Mouse_40px.png')
+        self.sizeMouse = int(self.imgMouse.shape[0])
         self.dt = dt
 
     def _draw_square(self, canvas, x, y, color, size):
@@ -61,34 +69,15 @@ class GridworldEnv(gym.Env):
         return canvas
 
     def _draw_agent(self, canvas, x, y, color):
-        size = 15
-        self._draw_square(canvas, x, y, color, size)
-
-        # Draw "nose"
-        size = 20
-        canvas.stroke_style = color
-        canvas.stroke_width = 5.0
-        canvas.stroke_line(
-            x,
-            y,
-            x + math.cos(self.state[-1]) * size,
-            y - math.sin(self.state[-1]) * size,
-        )
-        # dx = np.linspace(x, x + math.cos(self.state[-1]) * size, size)
-        # dy = np.linspace(y, y - math.sin(self.state[-1]) * size, size)
-        # for ax, ay in zip(dx, dy):
-        #     self._draw_square(canvas, ax, ay, color, 3)
+        
+        imgRot = ndimage.rotate((self.imgMouse*255).astype('uint8'), self.state[2]*180/math.pi, reshape=False)
+        canvas.put_image_data(imgRot, self.state[0]*self.image_scale-self.sizeMouse/2 , self.state[1]*self.image_scale-self.sizeMouse/2)
+                    
         return canvas
 
     def _distribute_food(self):
-        prob = np.random.random(self.observation_space.nvec)
-        highest_indices = np.unravel_index(np.argsort(prob, axis=None), prob.shape)
-        self.food = list(
-            zip(
-                highest_indices[0][: self.food_items],
-                highest_indices[1][: self.food_items],
-            )
-        )
+        indices = np.random.randint(self.sizeMouse, self.MAX_SIZE-self.sizeMouse, size=(self.food_items,2))
+        self.food = indices.tolist()
 
     def _getAngle(self, food_pos):
         # Define angle to food
@@ -115,7 +104,7 @@ class GridworldEnv(gym.Env):
     def _observe(self):
         # Define reward
         dist, food_pos = self._closest_food(self.state[:2])
-        if dist < self.DIST_SCALE * 7:  # Radius of 5
+        if dist < self.DIST_SCALE * 15:  # Radius of 5
             self.food.remove(food_pos)  # Delete food
             reward = 1
             dist, food_pos = self._closest_food(self.state[:2])
@@ -133,14 +122,20 @@ class GridworldEnv(gym.Env):
 
         return np.array([angle_left, angle_right]), reward
 
-    def render(self, canvas):
-        if len(self.food) == 0:
-            return canvas
-        # Draw food
-        for (x, y) in self.food:
-            self._draw_square(canvas, x, y, "rgb(246, 195, 53)", 10)
-        # Draw agent
-        self._draw_agent(canvas, *self.state[:2], "red")
+
+
+    def render(self, canvas, is_done):
+        if is_done:
+            imgCompleted = Image.from_file('../norse_rl/images/Completed_250px.png')
+            canvas.draw_image(imgCompleted, self.MAX_SIZE/2-125,self.MAX_SIZE/2-125)
+        else:            
+            if len(self.food) == 0:
+                return canvas
+            # Draw food
+            for (x, y) in self.food:
+                self._draw_square(canvas, x, y, "rgb(246, 195, 53)", 10)
+            # Draw agent
+            self._draw_agent(canvas, *self.state[:2], "red")
         return canvas
 
     def reset(self):

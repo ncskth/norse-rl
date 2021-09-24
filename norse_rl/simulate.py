@@ -2,12 +2,14 @@ import matplotlib
 from matplotlib import cm
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+import scipy.ndimage as ndimage
 from ipycanvas import Canvas, hold_canvas
 import time
-
 import torch
-
 import IPython.display as display
+from ipywidgets import Image
+import math
 
 
 def draw_network(
@@ -152,12 +154,12 @@ class Simulation:
         try:
             while not is_done:
                 with hold_canvas(canvas):
-                    canvas.clear()
+                    # canvas.clear()
 
                     frame_diff = time.time() - frame_start
                     frame_start = time.time()
                     canvas.fill_style = "rgb(50, 50, 50)"
-                    canvas.fill_rect(0, 0, 400, 400)
+                    canvas.fill_rect(0, 0, self.env.MAX_SIZE, self.env.MAX_SIZE)
 
                     # Run and draw environment
                     network_time = time.time()
@@ -179,7 +181,8 @@ class Simulation:
 
                     # Set visual changes
                     visual_time = time.time()
-                    self.env.render(canvas)
+                    self.env.render(canvas, is_done)
+
                     visual_time = time.time() - visual_time
 
                     # Update fps and redraw every second
