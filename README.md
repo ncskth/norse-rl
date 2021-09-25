@@ -6,7 +6,7 @@ Visit [https://ncskth.github.io/norse-rl/](https://ncskth.github.io/norse-rl/) f
 
 ## Authors
 
-Norse is created by
+Created by
 * [Jens E. Pedersen](https://www.kth.se/profile/jeped) (@GitHub [jegp](https://github.com/jegp/)), doctoral student at KTH Royal Institute of Technology, Sweden.
 * [Juan P. R. Bermudez](https://www.kth.se/profile/jprb) (@GitHub [jpromerob](https://github.com/jpromerob/)), doctoral student at KTH Royal Institute of Technology, Sweden.
 
