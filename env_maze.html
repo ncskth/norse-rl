@@ -250,13 +250,13 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">norse_rl.workshop</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="c1"># Weight matrix</span>
-<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span> 
-    <span class="p">,</span> <span class="p">[</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> 
+    <span class="p">,</span> <span class="p">[</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="p">]</span>
 
 <span class="c1">## Neural network</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">SequentialState</span><span class="p">(</span>
     <span class="n">norse</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">(),</span>
-    <span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span>
+    <span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span>
     <span class="n">norse</span><span class="o">.</span><span class="n">LICell</span><span class="p">(),</span>
 <span class="p">)</span>
 
@@ -265,23 +265,19 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "e1900c8b2a9f49708d9fc7abf8f88a48", "version_major": 2, "version_minor": 0}
-</script></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">norse_rl.workshop</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="c1"># Weight matrix</span>
-<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mi">2</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span> 
-    <span class="p">,</span> <span class="p">[</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mi">2</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> 
+    <span class="p">,</span> <span class="p">[</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span> <span class="p">]</span>
 
 <span class="c1">## Neural network</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">SequentialState</span><span class="p">(</span>
     <span class="n">norse</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">(),</span>
-    <span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span>
+    <span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span>
     <span class="n">norse</span><span class="o">.</span><span class="n">LICell</span><span class="p">(),</span>
 <span class="p">)</span>
 
@@ -290,23 +286,19 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "3c03628bd0814c0b9260cd55f8abb1f3", "version_major": 2, "version_minor": 0}
-</script></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">norse_rl.workshop</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="c1"># Weight matrix</span>
-<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mf">0.2</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]</span> 
-    <span class="p">,</span> <span class="p">[</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mf">0.2</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">]</span> 
+    <span class="p">,</span> <span class="p">[</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">]</span> <span class="p">]</span>
 
 <span class="c1">## Neural network</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">SequentialState</span><span class="p">(</span>
     <span class="n">norse</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">(),</span>
-    <span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span>
+    <span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span>
     <span class="n">norse</span><span class="o">.</span><span class="n">LICell</span><span class="p">(),</span>
 <span class="p">)</span>
 
@@ -315,23 +307,19 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "c824d3ea12644c8aa051aec1447083ed", "version_major": 2, "version_minor": 0}
-</script></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">norse_rl.workshop</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="c1"># Weight matrix</span>
-<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span>  <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]</span> 
-    <span class="p">,</span> <span class="p">[</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span>  <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> 
+    <span class="p">,</span> <span class="p">[</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span> <span class="p">]</span>
 
 <span class="c1">## Neural network</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">SequentialState</span><span class="p">(</span>
     <span class="n">norse</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">(),</span>
-    <span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span>
+    <span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span>
     <span class="n">norse</span><span class="o">.</span><span class="n">LICell</span><span class="p">(),</span>
 <span class="p">)</span>
 
@@ -342,8 +330,11 @@
 </div>
 <div class="cell_output docutils container">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "50d74ea0f0054f03abadd9c2e8fafdff", "version_major": 2, "version_minor": 0}
-</script></div>
+{"model_id": "b9af748e5e1e48ccaa880ff12e4e0a09", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>End of Task ... 
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 </div>
