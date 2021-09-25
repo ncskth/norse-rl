@@ -149,7 +149,7 @@ class Simulation:
         iterations = 0
 
         try:
-            max_it = 5*(1 + self.env.level * 2)
+            max_it = 3000*(1 + self.env.level * 2)
         except:
             max_it = 0
 
