@@ -94,7 +94,7 @@ def draw_network(
             # Draw background
             # Ensure voltage is displayed as spike when i >= 1
             v, i = state_n.v[m], state_n.i[m]
-            v = 1.0 if i.item() >=1 else (v.clip(-1, 1).item() + 1) / 2
+            v = 1.0 if i.item() >= 1 else (v.clip(-1, 1).item() + 1) / 2
             color = cm.coolwarm(v, bytes=True)
             canvas.fill_style = f"rgb({color[0]},{color[1]},{color[2]})"
             canvas.fill_circle(cx, cy, radius)
@@ -149,7 +149,7 @@ class Simulation:
         iterations = 0
 
         try:
-            max_it = 3000*(1 + self.env.level * 2)
+            max_it = 3000 * (1 + self.env.level * 2)
         except:
             max_it = 0
 
@@ -212,7 +212,7 @@ class Simulation:
                     canvas.fill_style = "white"
                     canvas.fill_text(fps_text, 10, 20)
                 time.sleep(max(0, self.fps_sleep - (time.time() - frame_start)))
-                
+
                 iterations += 1
                 if max_it > 0 and iterations > max_it:
                     break
@@ -226,7 +226,7 @@ class Simulation:
             canvas.fill_rect(20, 160, 360, 80)
             canvas.font = "80px Courier New bolder"
             canvas.fill_style = "red"
-            canvas.fill_text("Score: " + str(round(score)), 50, 225)
+            canvas.fill_text("Score: " + str(math.max(0, round(score))), 50, 225)
         except:
             score = 0
         finally:
