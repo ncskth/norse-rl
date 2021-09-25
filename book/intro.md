@@ -46,7 +46,7 @@ To get started with each task, click on the links below.
 | 1. **Cartpole**      |  Balance a wobbly cartpole | [**Click to start the experiment** ![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD?filepath=book%2Fenv_cartpole.ipynb) |
 | 2. **Mice and cheese** |  Help a mouse find cheese | [**Click to start the experiment** ![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD?filepath=book%2Fenv_grid.ipynb) |
 | 3. **Mice and mazes** |  Help a mouse find cheese, with obstacles! | [**Click to start the experiment** ![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD?filepath=book%2Fenv_maze.ipynb) |
-| 4. ? |  To be disclosed | - |
+| 4. **Maze challenge** |  A challenging maze with distance information | [**Click to start the experiment** ![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ncskth/norse-rl/HEAD?filepath=book%2Fenv_maze_dist.ipynb) |
 
 # About Us
 

@@ -12,3 +12,7 @@ register(
     id="Mazeworld-v0",
     entry_point="norse_rl.mazeworld:MazeworldEnv",
 )
+register(
+    id="MazeworldDist-v0",
+    entry_point="norse_rl.mazeworld_dist:MazeworldDistEnv",
+)
