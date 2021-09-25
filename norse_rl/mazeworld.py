@@ -42,7 +42,7 @@ class MazeworldEnv(gym.Env):
     ROTATION_SCALE = 1 / (math.pi * 2)
 
     action_labels = ["Left", "Right"]
-    observation_labels = ["Left ∠", "Right ∠", "Right\nWhisker", "Left\nWhisker", "Distance"] 
+    observation_labels = ["Left ∠", "Right ∠", "Right\nWhisker", "Left\nWhisker"] 
 
     action_space = spaces.Box(0, 1, shape=(2,))
     observation_space = spaces.MultiDiscrete([MAX_SIZE, MAX_SIZE])
@@ -165,7 +165,7 @@ class MazeworldEnv(gym.Env):
 
         # return np.array([angle_left, angle_right]), reward
         # return np.array([angle_left, angle_right, 0.5, 0.5]), reward
-        return np.array([angle_left, angle_right, self.state[3], self.state[4], dist]), reward
+        return np.array([angle_left, angle_right, self.state[3], self.state[4]]), reward
 
     def render(self, canvas):
         # Draw background
