@@ -146,6 +146,12 @@ class Simulation:
         # Initialize environment and network
         observation = self.env.reset()
         state = None
+        iterations = 0
+
+        try:
+            max_it = 5*(1 + self.env.level * 2)
+        except:
+            max_it = 0
 
         canvas = Canvas(width=900, height=400)
         display.display(canvas)
@@ -206,5 +212,22 @@ class Simulation:
                     canvas.fill_style = "white"
                     canvas.fill_text(fps_text, 10, 20)
                 time.sleep(max(0, self.fps_sleep - (time.time() - frame_start)))
+                
+                iterations += 1
+                if max_it > 0 and iterations > max_it:
+                    break
+
         except KeyboardInterrupt:
             pass
+
+        try:
+            score = self.env.food_items - len(self.env.food) * max_it / iterations
+            canvas.fill_style = "rgb(50, 50, 50)"
+            canvas.fill_rect(20, 160, 360, 80)
+            canvas.font = "80px Courier New bolder"
+            canvas.fill_style = "red"
+            canvas.fill_text("Score: " + str(round(score)), 50, 225)
+        except:
+            score = 0
+        finally:
+            print("End of Task ... ")
