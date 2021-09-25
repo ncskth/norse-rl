@@ -88,7 +88,7 @@ class MazeworldEnv(gym.Env):
         return canvas
 
     def _get_level(self):
-        file1 = open(str(self.root) + '/levels/level_'+ str(self.level) +'.txt', 'r')
+        file1 = open("levels/level_"+ str(self.level) +".txt", 'r')
         x = 0
         y = 0
         cheese = []
