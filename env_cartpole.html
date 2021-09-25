@@ -295,6 +295,7 @@ cart(x) = \begin{cases}
 <li><p>a <strong>weight matrix</strong> that describes synapse connectivity strength and</p></li>
 <li><p>a <strong>neural network</strong> that describes how signals flow from top to bottom</p></li>
 </ol>
+<p>Go ahead, try to adjust the weights and change your network below to keep the pole from faling!</p>
 <p><strong>To run the code below</strong>, 1) focus the cell with your mouse, and 2) press the <span style="font-size: 280%; line-height: 24px; vertical-align: bottom;">‣</span> button in the above panel <em>or</em> hit <code class="docutils literal notranslate"><span class="pre">ctrl+enter</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -304,9 +305,9 @@ cart(x) = \begin{cases}
 <span class="c1">## Weight matrix</span>
 <span class="c1">##</span>
 <span class="n">w</span> <span class="o">=</span> <span class="p">[[</span> 
-       <span class="mi">1</span><span class="p">,</span>  <span class="c1"># Left angle</span>
+       <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Left angle</span>
        <span class="mi">1</span><span class="p">,</span>  <span class="c1"># Right angle</span>
-       <span class="mi">1</span><span class="p">,</span>  <span class="c1"># Left angular velocity</span>
+       <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Left angular velocity</span>
        <span class="mi">1</span>   <span class="c1"># Right angular velocity</span>
     <span class="p">]]</span>
 
@@ -323,30 +324,6 @@ cart(x) = \begin{cases}
 <span class="c1">## Simulate your neural network</span>
 <span class="c1">##</span>
 <span class="n">run</span><span class="p">(</span><span class="s2">&quot;Cartpole-v0&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_1687660</span><span class="o">/</span><span class="mf">1634091614.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">     </span><span class="mi">23</span> <span class="c1">## Simulate your neural network</span>
-<span class="g g-Whitespace">     </span><span class="mi">24</span> <span class="c1">##</span>
-<span class="ne">---&gt; </span><span class="mi">25</span> <span class="n">run</span><span class="p">(</span><span class="s2">&quot;Cartpole-v0&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
-
-<span class="nn">~/norse-rl/norse_rl/workshop.py</span> in <span class="ni">run</span><span class="nt">(environment, model, **kwargs)</span>
-<span class="g g-Whitespace">     </span><span class="mi">18</span>         <span class="n">sim_args</span><span class="p">[</span><span class="s1">&#39;show_fps&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;show_fps&#39;</span><span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">19</span>     <span class="n">simulation</span> <span class="o">=</span> <span class="n">simulate</span><span class="o">.</span><span class="n">Simulation</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="o">**</span><span class="n">sim_args</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">20</span>     <span class="k">return</span> <span class="n">simulation</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-
-<span class="nn">~/norse-rl/norse_rl/simulate.py</span> in <span class="ni">run</span><span class="nt">(self, model)</span>
-<span class="g g-Whitespace">    </span><span class="mi">149</span> 
-<span class="g g-Whitespace">    </span><span class="mi">150</span>         <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">151</span>             <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">level</span>
-<span class="g g-Whitespace">    </span><span class="mi">152</span>         <span class="k">except</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">153</span>             <span class="n">level</span> <span class="o">=</span> <span class="mi">0</span>
-
-<span class="ne">AttributeError</span>: &#39;CartpoleEnv&#39; object has no attribute &#39;food_items&#39;
 </pre></div>
 </div>
 </div>
