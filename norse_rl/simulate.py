@@ -226,7 +226,7 @@ class Simulation:
             canvas.fill_rect(20, 160, 360, 80)
             canvas.font = "80px Courier New bolder"
             canvas.fill_style = "red"
-            canvas.fill_text("Score: " + str(math.max(0, round(score))), 50, 225)
+            canvas.fill_text("Score: " + str(max(0, round(score))), 50, 225)
         except:
             score = 0
         finally:
