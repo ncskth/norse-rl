@@ -13,7 +13,7 @@ from ipywidgets import Image
 import norse_rl.util as util
 
 
-class MazeworldEnv(gym.Env):
+class MazeworldDistEnv(gym.Env):
     """
     Description:
         ...
@@ -42,7 +42,13 @@ class MazeworldEnv(gym.Env):
     ROTATION_SCALE = 1 / (math.pi * 2)
 
     action_labels = ["Left", "Right"]
-    observation_labels = ["Left ∠", "Right ∠", "Right\nWhisker", "Left\nWhisker"] 
+    observation_labels = [
+        "Left ∠",
+        "Right ∠",
+        "Right\nWhisker",
+        "Left\nWhisker",
+        "Distance",
+    ]
 
     action_space = spaces.Box(0, 1, shape=(2,))
     observation_space = spaces.MultiDiscrete([MAX_SIZE, MAX_SIZE])
@@ -50,7 +56,13 @@ class MazeworldEnv(gym.Env):
     metadata = {"render.modes": ["rgb_array"], "video.frames_per_second": 50}
     pixel_scale = 5
 
-    def __init__(self, food_items: int = 10, image_scale: float = 1.0, dt: float = 1.0, level: int = 1):
+    def __init__(
+        self,
+        food_items: int = 10,
+        image_scale: float = 1.0,
+        dt: float = 1.0,
+        level: int = 1,
+    ):
         assert food_items < self.MAX_SIZE, f"Food must be < {self.MAX_SIZE}"
         self.food_items = food_items
         self.image_scale = image_scale
@@ -88,25 +100,29 @@ class MazeworldEnv(gym.Env):
         return canvas
 
     def _get_level(self):
-        file1 = open("levels/level_"+ str(self.level) +".txt", 'r')
+        file1 = open("levels/level_" + str(self.level) + ".txt", "r")
         x = 0
         y = 0
         cheese = []
-        
+
         while True:
 
             line = file1.readline()
             for x in range(len(line)):
-                if(line[x] == "#"):
-                    self.wall.append(((x+0.5)*self.tileSize,(y+0.5)*self.tileSize))
+                if line[x] == "#":
+                    self.wall.append(
+                        ((x + 0.5) * self.tileSize, (y + 0.5) * self.tileSize)
+                    )
 
-                if(line[x] == "*"):
-                    self.food.append(((x+0.5)*self.tileSize,(y+0.5)*self.tileSize))
-        
+                if line[x] == "*":
+                    self.food.append(
+                        ((x + 0.5) * self.tileSize, (y + 0.5) * self.tileSize)
+                    )
+
             y += 1
             if not line:
                 break
-        
+
         file1.close()
         self.food_items = len(self.food)
 
@@ -114,7 +130,6 @@ class MazeworldEnv(gym.Env):
         for w in self.wall:
             self._draw_square(canvas, w[0], w[1], "rgb(153, 76, 0)", self.tileSize)
 
-        
     def _distribute_food(self):
         indices = np.random.randint(
             self.sizeMouse, self.MAX_SIZE - self.sizeMouse, size=(self.food_items, 2)
@@ -132,7 +147,6 @@ class MazeworldEnv(gym.Env):
             math.cos(current_angle - target_angle),
         )
         return angle
-
 
     def _closest_food(self, position):
         min_dist = +math.inf
@@ -161,8 +175,11 @@ class MazeworldEnv(gym.Env):
             angle = self._getAngle(food_pos)
         angle_left = max(0, -angle) * self.ROTATION_SCALE
         angle_right = max(0, angle) * self.ROTATION_SCALE
-        
-        return np.array([angle_left, angle_right, self.state[3], self.state[4]]), reward
+
+        return (
+            np.array([angle_left, angle_right, self.state[3], self.state[4], dist]),
+            reward,
+        )
 
     def render(self, canvas):
         # Draw background
@@ -180,10 +197,10 @@ class MazeworldEnv(gym.Env):
             # Draw food
             for (x, y) in self.food:
                 self._draw_square(canvas, x, y, "rgb(246, 195, 53)", self.tileSize)
-            
+
             # Draw Walls
             self._draw_walls(canvas)
-            
+
             # Draw agent
             self._draw_agent(canvas, *self.state[:2], "red")
         return canvas
@@ -191,64 +208,63 @@ class MazeworldEnv(gym.Env):
     def _check_collisions(self, d_x, d_y):
         new_x = self.state[0] + d_x
         new_y = self.state[1] + d_y
-        max_val = .5
-        inc_val = max_val/1
+        max_val = 0.5
+        inc_val = max_val / 1
         l_val = 0
         r_val = 0
 
         for w in self.wall:
-            if abs(w[0]-self.state[0]) <= (self.tileSize + self.sizeMouse)/2:
-                if abs(w[1]-new_y) <= (self.tileSize + self.sizeMouse)/2:
+            if abs(w[0] - self.state[0]) <= (self.tileSize + self.sizeMouse) / 2:
+                if abs(w[1] - new_y) <= (self.tileSize + self.sizeMouse) / 2:
                     d_y = 0
 
                     r_val = inc_val
                     l_val = 0
-                    if self.state[2] < math.pi/2:
+                    if self.state[2] < math.pi / 2:
                         r_val = 0
                         l_val = inc_val
                     if self.state[2] < 0:
                         r_val = inc_val
                         l_val = 0
-                    if self.state[2] < -math.pi/2:
+                    if self.state[2] < -math.pi / 2:
                         r_val = 0
                         l_val = inc_val
-        
 
-            if abs(w[1]-self.state[1]) <= (self.tileSize + self.sizeMouse)/2:
-                if abs(w[0]-new_x) <= (self.tileSize + self.sizeMouse)/2:
+            if abs(w[1] - self.state[1]) <= (self.tileSize + self.sizeMouse) / 2:
+                if abs(w[0] - new_x) <= (self.tileSize + self.sizeMouse) / 2:
                     d_x = 0
 
                     r_val = 0
                     l_val = inc_val
-                    if self.state[2] < math.pi/2:
+                    if self.state[2] < math.pi / 2:
                         r_val = inc_val
                         l_val = 0
                     if self.state[2] < 0:
                         r_val = 0
                         l_val = inc_val
-                    if self.state[2] < -math.pi/2:
+                    if self.state[2] < -math.pi / 2:
                         r_val = inc_val
                         l_val = 0
-        
 
         if r_val > 0:
             self.state[3] = min(max_val, self.state[3] + r_val)
         else:
-            self.state[3] = 0 
+            self.state[3] = 0
 
         if l_val > 0:
             self.state[4] = min(max_val, self.state[4] + l_val)
         else:
-            self.state[4] = 0 
-                        
+            self.state[4] = 0
+
         return d_x, d_y
 
     def reset(self):
         # Init in center pointing east
-        self.state = np.array([x // 2 for x in self.observation_space.nvec] + [0] +[0] + [0])
+        self.state = np.array(
+            [x // 2 for x in self.observation_space.nvec] + [0] + [0] + [0]
+        )
         self._get_level()
         return self._observe()[0]
-
 
     def step(self, action, random_movement: bool = True):
         left_move, right_move = np.array(action).clip(0, 1)
