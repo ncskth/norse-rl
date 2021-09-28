@@ -1,8 +1,14 @@
 # Norse RL
 
-Reinforcement learning for [Norse](https://github.com/norse/norse)
+Reinforcement learning library and simulation environment using [Norse](https://github.com/norse/norse).
 
-Visit [https://ncskth.github.io/norse-rl/](https://ncskth.github.io/norse-rl/) for the website.
+Visit [https://ncskth.github.io/norse-rl/](https://ncskth.github.io/norse-rl/) to interact with the live tutorials.
+
+## Environments
+
+* Cartpole
+* Maze - without hedge walls
+* Maze - with hedge walls
 
 ## Authors
 
