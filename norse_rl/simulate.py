@@ -212,22 +212,22 @@ class Simulation:
                     canvas.fill_style = "white"
                     canvas.fill_text(fps_text, 10, 20)
                 time.sleep(max(0, self.fps_sleep - (time.time() - frame_start)))
-
                 iterations += 1
-                if max_it > 0 and iterations > max_it:
-                    break
 
         except KeyboardInterrupt:
             pass
-
-        try:
-            score = self.env.food_items - len(self.env.food) * max_it / iterations
-            canvas.fill_style = "rgb(50, 50, 50)"
-            canvas.fill_rect(20, 160, 360, 80)
-            canvas.font = "80px Courier New bolder"
-            canvas.fill_style = "red"
-            canvas.fill_text("Score: " + str(max(0, round(score))), 50, 225)
-        except:
-            score = 0
         finally:
-            print("End of Task ... ")
+            try:
+                print(self.env.food_items, len(self.env.food), max_it / iterations)
+                score = (self.env.food_items - len(self.env.food)) * max_it / iterations
+                canvas.fill_style = "rgb(50, 50, 50)"
+                canvas.fill_rect(20, 150, 360, 60)
+                canvas.font = "60px Courier New bolder"
+                canvas.fill_style = "red"
+                canvas.text_align = "center"
+                canvas.fill_text(f"Score: {max(0, score):.0f}", 200, 200)
+            except Exception as e:
+                print(e)
+                score = 0
+            finally:
+                print("End of Task ... ")
