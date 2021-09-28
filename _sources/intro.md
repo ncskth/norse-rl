@@ -4,7 +4,7 @@ In this workshop we are going to use *spiking neural networks* to control 2 simu
 a cartpole and a Braitenberg vehicle "mouse".
 This workshop is meant to give you hands-on experience with (virtual) neurorobotics experiments, while hopefully also having a bit of fun.
 
-Everything will be run online in [Jupyter Notebooks](https://jupyter.org/), so not installation or setup is required.
+Everything will be run online in [Jupyter Notebooks](https://jupyter.org/), so no installation or setup is required.
 Just follow the instructions below.
 
 <p align="center">
