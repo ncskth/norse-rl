@@ -74,6 +74,9 @@ class MazeworldDistEnv(gym.Env):
         self.food = []
         self.level = level
         self.tileSize = 10
+        
+        # Set seed
+        np.random.seed(0)
 
     def _draw_square(self, canvas, x, y, color, size):
         canvas.fill_style = color
@@ -266,7 +269,7 @@ class MazeworldDistEnv(gym.Env):
         self._get_level()
         return self._observe()[0]
 
-    def step(self, action, random_movement: bool = False):
+    def step(self, action, random_movement: bool = True):
         left_move, right_move = np.array(action).clip(0, 1)
         angle = self.state[2]
 
