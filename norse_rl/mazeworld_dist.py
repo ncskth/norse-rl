@@ -266,7 +266,7 @@ class MazeworldDistEnv(gym.Env):
         self._get_level()
         return self._observe()[0]
 
-    def step(self, action, random_movement: bool = True):
+    def step(self, action, random_movement: bool = False):
         left_move, right_move = np.array(action).clip(0, 1)
         angle = self.state[2]
 
